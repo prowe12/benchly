@@ -6,6 +6,7 @@ authors = ["Penny Rowe <1795738+prowe12@users.noreply.github.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+Django = "^4.1.3"
 
 [tool.poetry.dev-dependencies]
 
