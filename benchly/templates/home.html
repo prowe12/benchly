@@ -1,12 +1,17 @@
+<!-- Modify this file however you like, except for the lines with comments -->
 <!DOCTYPE HTML>
 <html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>test</title>
+  <title>Benchly</title>
+  <!-- Keep this line in the head-->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
   <h1>Benchly</h1>
+
+  <!-- These three lines will make the plot. Put them wherever you want the plot to be -->
   {% autoescape off %}
   {{ plot_div }}
   {% endautoescape %}
