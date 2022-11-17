@@ -10,7 +10,7 @@ def home(request):
     plot_div = plot([Scatter(x=x_data, y=y_data,
                         mode='lines', name='test',
                         opacity=0.8, marker_color='green')],
-               output_type='div')
+               output_type='div', include_plotlyjs=False)
     return render(request, "home.html", context={'plot_div': plot_div})
     # return render(request, 'home.html')
 
