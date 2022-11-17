@@ -11,9 +11,29 @@
 <body>
   <h1>Benchly</h1>
 
+  <!-- Dummy figure for Top Panel -->
   <!-- These three lines will make the plot. Put them wherever you want the plot to be -->
+  <!-- Django uses double brackets to render Python variables passed by the views to the templates. -->
   {% autoescape off %}
   {{ plot_div }}
   {% endautoescape %}
+  <!-- End Dummy figure for Top Panel -->
+
+  <!-- Dummy data for bottom panel -->
+  <!-- Eventually this will include the results of a query -->
+  <h2>Inputs</h2>
+  Scenario: starting year, final emissions </br>
+  {% for inp in clim_inputs %}
+    {{inp.scenario}}: {{inp.start_year}}, {{inp.final_emiss}} </br>
+  {% endfor %}
+
+  <h2>Outputs</h2>
+  Scenario: year, atmospheric co2, oceanic co2 </br>
+  {% for outp in clim_outputs %}
+    {{outp.scenario}}: {{outp.year}}, {{outp.atmos_co2}}, {{outp.ocean_co2}} </br>
+  {% endfor %}
+  <!-- End Dummy data for bottom panel -->
+
+
 </body>
 </html>
