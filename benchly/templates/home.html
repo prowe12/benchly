@@ -23,14 +23,19 @@
   <!-- Eventually this will include the results of a query -->
   <h2>Inputs</h2>
   Scenario: starting year, final emissions </br>
-  {% for inp in clim_inputs %}
+  {% for inp in all_inputs %}
     {{inp.scenario}}: {{inp.start_year}}, {{inp.final_emiss}} </br>
   {% endfor %}
 
   <h2>Outputs</h2>
-  Scenario: year, atmospheric co2, oceanic co2 </br>
-  {% for outp in clim_outputs %}
-    {{outp.scenario}}: {{outp.year}}, {{outp.atmos_co2}}, {{outp.ocean_co2}} </br>
+  Scenario: {{sel_inputs.scenario}} </br>
+  Starting year of reducing CO2 emissions: {{sel_inputs.start_year}} </br>
+  Final CO2 emissions: {{sel_inputs.final_emiss}} </br>
+  </br>
+  {% for cvar in sel_outputs %}
+    Year: {{cvar.year}} </br>
+    Atmos CO2: {{cvar.atmos_co2}} </br>
+    Ocean CO2: {{cvar.ocean_co2}} </br>
   {% endfor %}
   <!-- End Dummy data for bottom panel -->
 

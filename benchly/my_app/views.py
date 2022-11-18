@@ -13,28 +13,47 @@ from .models import ClimInputs, ClimOutputs
 # HTML/CSS/Javascript in your Template files into what you see in your browser
 # when you render a web page.
 
-def home(request):
+def home(request, sel_scenario=1, sel_clim_var='atmos_co2', sel_year=2100):
     """
-    Add a dummy graphic to the home page.
-    @param request An HttpRequest object
+    Add a dummy graphic print the relations to the home page
+    @param request  An HttpRequest object
+    @param scenario  The scenario to run
     """
-    # The data from the database to display 
-    # Todo: This should be from user input -> SQL query
-    clim_inputs = ClimInputs.objects.all()
-    clim_outputs = ClimOutputs.objects.all()
+    # Get all scenarios for the climate inputs
+    all_inputs = ClimInputs.objects.all()
+
+    # Get the selected inputs
+    sel_inputs = ClimInputs.objects.get(scenario=sel_scenario)
+
+    # Get all the tuples (years) from the output relation
+    # where the scenario is the selected scenario
+    timeseries = ClimOutputs.objects.filter(scenario=sel_scenario)
+
+    # From the selected output tuples, get the years column and
+    # the column of the selected climate variable
+    years = list(timeseries.values_list('year'))
+    years = [y[0] for y in years]
+    clim_var = list(timeseries.values_list(sel_clim_var))
+    clim_var = [c[0] for c in clim_var]
+
+    # Get the climate output variables for the selected scenario
+    # and the selected year
+    #sel_outputs = timeseries.filter(year=sel_year)
+    sel_outputs = ClimOutputs.objects.filter(scenario=sel_scenario,
+                                             year = sel_year)
 
     # The plot
-    # TODO: replace dummy graphic with plot from database
-    x_data = [0,1,2,3]
-    y_data = [x**2 for x in x_data]
-    plot_div = plot([Scatter(x=x_data, y=y_data,
+    plot_div = plot({'data':[Scatter(x=years, y=clim_var,
                         mode='lines', name='test',
                         opacity=0.8, marker_color='green')],
+                     'layout': {'xaxis': {'title': 'year'},
+                     'yaxis': {'title': sel_clim_var}}},
                output_type='div', include_plotlyjs=False)
 
     context={'plot_div': plot_div,
-             'clim_inputs': clim_inputs,
-             'clim_outputs': clim_outputs}
+             'all_inputs': all_inputs,
+             'sel_inputs': sel_inputs,
+             'sel_outputs': sel_outputs}
     return render(request, "home.html", context)
 
 #def index(request):
