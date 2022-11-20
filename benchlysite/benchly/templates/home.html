@@ -1,0 +1,80 @@
+<!-- Modify this file however you like, except for the lines with comments -->
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Benchly</title>
+  <!-- Keep this line in the head-->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+  <h1>Benchly</h1>
+
+
+  <!-- Top Panel -->
+  <!-- Buttons for user to select the scenarios to plot -->
+  <form action="{% url 'results' 2 %}" method="post">
+    {% csrf_token %}
+    <fieldset>
+        <legend><h1>TEST</h1></legend>
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+        {% for inp in all_inputs %}
+            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+            <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+        {% endfor %}
+    </fieldset>
+    <input type="submit" value="Vote">
+  </form>
+
+
+  <form action="#" method="get">
+    <!-- <input type="text" value="8" name="mytextbox" size="1"/> -->
+    <input type="submit" class="btn" value="Scenario 1" name="scenario1"> </br>
+    <input type="submit" class="btn" value="Scenario 2" name="scenario2"> </br>
+    <input type="submit" class="btn" value="Scenario 3" name="scenario3"> </br>
+  </form>
+  <input type="checkbox" class="toggle" id="toggle4" name="scenario4">
+    <label class="toggle" for="toggleSwitches"> Scenario 4</label>   </br>
+  
+  <!-- The plot: these three lines will make the plot. Put them wherever you want the plot to be -->
+  <!-- Django uses double brackets to render Python variables passed by the views to the templates. -->
+  {% autoescape off %}
+  {{ plot_div }}
+  {% endautoescape %}
+  <!-- End Dummy figure for Top Panel -->
+
+  <!-- Dummy data for bottom panel -->
+  <!-- Eventually this will include the results of a query -->
+  <h2>Inputs</h2>
+  Scenario: starting year, final emissions </br>
+  {% for inp in all_inputs %}
+    {{inp.scenario}}: {{inp.start_year}}, {{inp.final_emiss}} </br>
+  {% endfor %}
+
+  <!-- Buttons for user to select the scenario and years to display results for -->
+  <form action="#" method="get">
+    <input type="text" value="1" name="mytextbox" size="1"/>
+    <input type="submit" class="btn" value="Scenario" name="mybtn">
+  </form>
+  <form action="#" method="get">
+    <input type="text" value="1" name="mytextbox" size="1"/>
+    <input type="submit" class="btn" value="Year" name="mybtn">
+  </form>
+  
+
+  <h2>Outputs</h2>
+  Scenario: {{sel_inputs.scenario}} </br>
+  Starting year of reducing CO2 emissions: {{sel_inputs.start_year}} </br>
+  Final CO2 emissions: {{sel_inputs.final_emiss}} </br>
+  </br>
+  {% for cvar in sel_outputs %}
+    Year: {{cvar.year}} </br>
+    Atmos CO2: {{cvar.atmos_co2}} </br>
+    Ocean CO2: {{cvar.ocean_co2}} </br>
+  {% endfor %}
+  <!-- End Dummy data for bottom panel -->
+
+
+</body>
+</html>
