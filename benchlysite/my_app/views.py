@@ -19,6 +19,18 @@ def home(request, sel_scenario=1, sel_clim_var='atmos_co2', sel_year=2100):
     @param request  An HttpRequest object
     @param scenario  The scenario to run
     """
+
+    # Selected scenario for figure
+    if (request.GET.get('scenario1')):
+        # if request.GET.get('mytextbox') == "Scenario 1":
+        sel_scenario = 1
+    if (request.GET.get('scenario2')):
+        sel_scenario = 2
+    if (request.GET.get('scenario3')):
+        sel_scenario = 3
+    if (request.GET.get('scenario4')):
+        sel_scenario = 4
+
     # Get all scenarios for the climate inputs
     all_inputs = ClimInputs.objects.all()
 

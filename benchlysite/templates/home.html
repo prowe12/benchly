@@ -13,12 +13,13 @@
 
   <!-- Top Panel -->
   <!-- Buttons to chose the Scenario for the plot -->
+  <h2>Select model inputs for figure</h2>
+  Scenario: starting year, final emissions </br>
   <form action="#" method="get">
-    <!-- <input type="text" value="8" name="mytextbox" size="1"/> -->
-    <input type="submit" class="btn" value="Scenario 1" name="scenario1"> </br>
-    <input type="submit" class="btn" value="Scenario 2" name="scenario2"> </br>
-    <input type="submit" class="btn" value="Scenario 3" name="scenario3"> </br>
-    <input type="submit" class="btn" value="Scenario 4" name="scenario4"> </br>
+    {% for inp in all_inputs %}
+      <input type="submit" class="btn" value="Scenario {{inp.scenario}}" name="scenario{{inp.scenario}}"> 
+      {{inp.start_year}}, {{inp.final_emiss}} </br>
+    {% endfor %}
   </form>
 
   <!-- These three lines will make the plot. Put them wherever you want the plot to be -->
