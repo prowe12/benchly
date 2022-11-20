@@ -1,0 +1,44 @@
+<!-- Modify this file however you like, except for the lines with comments -->
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Benchly</title>
+  <!-- Keep this line in the head-->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+  <h1>Benchly</h1>
+
+  <!-- Dummy figure for Top Panel -->
+  <!-- These three lines will make the plot. Put them wherever you want the plot to be -->
+  <!-- Django uses double brackets to render Python variables passed by the views to the templates. -->
+  {% autoescape off %}
+  {{ plot_div }}
+  {% endautoescape %}
+  <!-- End Dummy figure for Top Panel -->
+
+  <!-- Dummy data for bottom panel -->
+  <!-- Eventually this will include the results of a query -->
+  <h2>Inputs</h2>
+  Scenario: starting year, final emissions </br>
+  {% for inp in all_inputs %}
+    {{inp.scenario}}: {{inp.start_year}}, {{inp.final_emiss}} </br>
+  {% endfor %}
+
+  <h2>Outputs</h2>
+  Scenario: {{sel_inputs.scenario}} </br>
+  Starting year of reducing CO2 emissions: {{sel_inputs.start_year}} </br>
+  Final CO2 emissions: {{sel_inputs.final_emiss}} </br>
+  </br>
+  {% for cvar in sel_outputs %}
+    Year: {{cvar.year}} </br>
+    Atmos CO2: {{cvar.atmos_co2}} </br>
+    Ocean CO2: {{cvar.ocean_co2}} </br>
+  {% endfor %}
+  <!-- End Dummy data for bottom panel -->
+
+
+</body>
+</html>
