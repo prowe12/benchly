@@ -24,20 +24,29 @@ class ClimInputs(models.Model):
     """
     Inputs to the climate model
     """
-    scenario = models.PositiveIntegerField()
+    scenario = models.PositiveIntegerField(primary_key = True)
     start_year = models.PositiveIntegerField()
     final_emiss = models.FloatField()
 
-class ClimOutputs(models.Model):
-    """
-    Outputs from the climate model
-    """
-    scenario = models.PositiveIntegerField()
-    year = models.PositiveIntegerField()
-    atmos_co2 = models.FloatField()
-    ocean_co2 = models.FloatField()
+# class ClimOutputs(models.Model):
+#     """
+#     Outputs from the climate model
+#     """
+#     scenario = models.ForeignKey(ClimInputs, on_delete=models.CASCADE)
+#     year = models.PositiveIntegerField()
+#     atmos_co2 = models.FloatField()
+#     ocean_co2 = models.FloatField()
 
-
+#     class Meta:
+#         """
+#         Make scenario and year the primary key as per
+#         https://stackoverflow.com/questions/16800375/how-can-i-set-two-primary-key-fields-for-my-models-in-django
+#         """
+#         constraints = [
+#             models.UniqueConstraint(
+#                 fields=['scenario', 'year'], name='unique_migration_host_combination'
+#             )
+#         ]
 
 
 # class PlotTimeSeries(models.Model):
