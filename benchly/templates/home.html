@@ -1,14 +1,138 @@
 <!-- Modify this file however you like, except for the lines with comments -->
 <!DOCTYPE HTML>
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Benchly</title>
   <!-- Keep this line in the head-->
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+  <style>
+    .scenario-buttons button {
+      color: Black;
+      padding: 10px 24px;
+      cursor: pointer;
+      width: 50%;
+      display: block;
+    }
+
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+    }
+
+    /* Style the header */
+    .header {
+      background-color: #f1f1f1;
+      padding: 20px;
+      text-align: center;
+    }
+
+    /* Create three equal columns that floats next to each other */
+    .column1 {
+      float: left;
+      width: 20%;
+      padding: 15px;
+      background-color: #f1f1f1;
+    }
+
+    .column2 {
+      float: left;
+      width: 80%;
+      padding: 15px;
+    }
+
+    .climate_variables {
+      background-color: #f1f1f1;
+      padding: 10px 24px;
+      display: block;
+      float: right;
+      width: 80%;
+      padding: 15px;
+    }
+
+    .climate_variables button {
+      padding: 10px 24px;
+      cursor: pointer;
+      margin-left: 1%;
+      margin-right: 1%;
+    }
+
+    /* Change color on hover */
+    .climate_variables button:hover {
+      background-color: blue;
+      color: white;
+    }
+
+
+    /* Clear floats after the columns */
+    .row:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+    @media screen and (max-width:600px) {
+      .column1 {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
+
+
+
 <body>
+
+  <div class="header">
+    <h1>Benchly's Climate Model</h1>
+    <p>Select scenarios and climate variable to update the graph</p>
+  </div>
+
+  <div class="row">
+    <div class="column1">
+      <h2>Climate Scenario</h2>
+      <div class="scenario-buttons">
+        <button>Scenario 1</button>
+        <button>Scenario 2</button>
+        <button>Scenario 3</button>
+      </div>
+    </div>
+
+
+    <div class="climate_variables">
+      <p>Climate Variables</p>
+      <button onclick="updateScenario('scenario1')">climate variable 1</button>
+      <button>climate variable 2</button>
+      <button>climate variable 3</button>
+      <button>climate variable 4</button>
+    </div>
+
+    <div class="column2" id="graph_area">
+
+      <h2>Content of Graph</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sit amet pretium urna. Vivamus venenatis
+        velit nec neque ultricies, eget elementum magna tristique. Quisque vehicula, risus eget aliquam placerat, purus
+        leo tincidunt eros, eget luctus quam orci in velit. Praesent scelerisque tortor sed accumsan convallis.</p>
+    </div>
+
+  </div>
+
+
+
+
+
+
+  <p>
+    ================================================================================================================================================================================================================================================================================================================================================================================================
+  </p>
   <h1>Benchly</h1>
 
   <!-- Dummy figure for Top Panel -->
@@ -24,7 +148,7 @@
   <h2>Inputs</h2>
   Scenario: starting year, final emissions </br>
   {% for inp in all_inputs %}
-    {{inp.scenario}}: {{inp.start_year}}, {{inp.final_emiss}} </br>
+  {{inp.scenario}}: {{inp.start_year}}, {{inp.final_emiss}} </br>
   {% endfor %}
 
   <h2>Outputs</h2>
@@ -33,12 +157,35 @@
   Final CO2 emissions: {{sel_inputs.final_emiss}} </br>
   </br>
   {% for cvar in sel_outputs %}
-    Year: {{cvar.year}} </br>
-    Atmos CO2: {{cvar.atmos_co2}} </br>
-    Ocean CO2: {{cvar.ocean_co2}} </br>
+  Year: {{cvar.year}} </br>
+  Atmos CO2: {{cvar.atmos_co2}} </br>
+  Ocean CO2: {{cvar.ocean_co2}} </br>
   {% endfor %}
   <!-- End Dummy data for bottom panel -->
 
 
+
 </body>
+
 </html>
+
+<script>
+
+
+  function updateScenario(input) {
+
+    console.log("bruh")
+
+    if (input == 'scenario1') {
+      document.getElementById("graph_area").innerHTML = "displaying scenario1";
+    }
+    else {
+      graph.innerHTML = "displaying a different scenario";
+    }
+
+
+
+  }
+
+  //document.getElementById("graph_area").innerHTML = "New text!";
+</script>
