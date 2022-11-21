@@ -1,5 +1,5 @@
 import csv
-from my_app.models import ClimOutputs
+from benchly.models import ClimOutputs, ClimInputs
 
 
 def run():
@@ -13,8 +13,13 @@ def run():
             print(row)
 
             # scenario id, year, atmospheric co2, oceanic co2
-            clim_outputs = ClimOutputs(scenario=row[0],
+            clim_outputs = ClimOutputs(scenario=ClimInputs.objects.get(scenario=int(row[0])),
                         year=row[1],
                         atmos_co2=row[2],
                         ocean_co2=row[3])
             clim_outputs.save()
+
+            # new_team = Team(
+            # nickname = team_name,
+            # employee_id = employee_id,
+            # department_id = Department.objects.get(password = password, department_name = department_name)

@@ -1,0 +1,16 @@
+<h1>Choose the desired year for displaying climate variables</h1>
+<h2>Selected scenario: {{ question.scenario }}</h2>
+
+
+<form action="{% url 'vote' question.scenario %}" method="post">
+    {% csrf_token %}
+    <fieldset>
+        <legend><h1>Select a year</h1></legend>
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+        {% for choice in question.climoutputs_set.all %}
+            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.year }}">
+            <label for="choice{{ forloop.counter }}">{{ choice.year }}</label><br>
+        {% endfor %}
+    </fieldset>
+    <input type="submit" value="Select">
+</form>

@@ -14,6 +14,7 @@ PlotTimeSeries: choose scenario and climate model variable to plot
 DisplayClimVars: choose scenario and year to display output variables for.
 """
 from django.db import models
+import numpy as np
 
 class ClimInputs(models.Model):
     """
@@ -22,15 +23,19 @@ class ClimInputs(models.Model):
     scenario = models.PositiveIntegerField(primary_key = True)
     start_year = models.PositiveIntegerField()
     final_emiss = models.FloatField()
+    def __str__(self):
+        return str(self.scenario)
 
 class ClimOutputs(models.Model):
     """
     Outputs from the climate model
     """
-    scenario = models.ForeignKey(ClimInputs, on_delete=models.CASCADE)
+    scenario = models.ForeignKey(ClimInputs, db_column='scenario', on_delete=models.CASCADE)
     year = models.PositiveIntegerField()
     atmos_co2 = models.FloatField()
     ocean_co2 = models.FloatField()
+    def __str__(self):
+        return str(self.scenario) + ': ' + str(self.year)
 
     class Meta:
         """
@@ -43,13 +48,51 @@ class ClimOutputs(models.Model):
             )
         ]
 
-# class ChoiceDisplay(models.Model):
-#     """
-#     User inputs for displaying climate variables for a given scenario and year
-#     The user can only choose one scenario/year
-#     """
-#     scenario = models.ForeignKey(ClimOutputs, on_delete=models.CASCADE)
-#     year = models.ForeignKey(ClimOutputs, on_delete=models.CASCADE)
+class Display(models.Model):
+    """
+    User inputs that the user can only choose one of
+    The user can only choose one scenario/year
+    """
+    user = models.CharField(primary_key = True, max_length=20)
+    scenario = models.ForeignKey(ClimInputs, db_column='scenario', on_delete=models.CASCADE)
+    year = models.ForeignKey(ClimOutputs, db_column='year', on_delete=models.CASCADE)
+    #year = models.PositiveIntegerField()
+    def __str__(self):
+        return str(self.user)
+
+
+class TimeseriesVar(models.Model):
+    """ 
+    The climate variable that the user wishes to display a time series for
+    """
+    user = models.CharField(primary_key = True, max_length=20)
+    climvar = models.CharField(max_length=20)
+    def __str__(self):
+        return str(self.user) + str(self.climvar)
+
+class Timeseries(models.Model):
+    """
+    User inputs for displaying a time series of a particular climate variable for a scenario
+    The user can choose multiple scenarios but only one climate variable
+    The scenario can differ from the scenario in Display
+    """
+    user = models.CharField(max_length=20)
+    scenario = models.ForeignKey(ClimInputs, db_column='scenario', on_delete=models.CASCADE)
+    def __str__(self):
+        return str(self.user) + str(self.scenario)
+
+    class Meta:
+        """
+        Make user and scenario the primary key.
+        This allows each user to have multiple scenarios
+        """
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'scenario'], name='unique_migration_host_combination2'
+            )
+        ]
+
+
 
 
 # class Question(models.Model):
@@ -60,6 +103,3 @@ class ClimOutputs(models.Model):
 #     question = models.ForeignKey(Question, on_delete=models.CASCADE)
 #     choice_text = models.CharField(max_length=200)
 #     votes = models.IntegerField(default=0)
-
-
-

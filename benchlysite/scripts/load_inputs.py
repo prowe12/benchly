@@ -1,5 +1,5 @@
 import csv
-from my_app.models import ClimInputs
+from benchly.models import ClimInputs
 
 
 def run():

@@ -1,0 +1,12 @@
+
+<h1>Click on a scenario for displaying climate variables</h1>
+Scenario: starting year, final emission
+{% if latest_list %}
+    <ul>
+    {% for question in latest_list %}
+        <li><a href="/benchly/{{ question.scenario }}/">{{ question.scenario }}: {{ question.start_year }},{{ question.final_emiss }} </a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No scenarios are available.</p>
+{% endif %}
