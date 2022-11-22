@@ -9,68 +9,165 @@
   <title>Benchly</title>
   <!-- Keep this line in the head-->
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+<style>
+  .scenario-buttons button {
+    color: Black;
+    padding: 10px 24px;
+    cursor: pointer;
+    width: 50%;
+    display: block;
+  }
+
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  /* Style the header */
+  .header {
+    background-color: #f1f1f1;
+    padding: 5px 10px;
+    text-align: center;
+  }
+
+  /* Create three equal columns that floats next to each other */
+  .column1 {
+    float: left;
+    width: 20%;
+    padding: 0px 15px;
+    background-color: #f1f1f1;
+  }
+
+  .column2 {
+    float: left;
+    width: 80%;
+    padding: 0px 0px;
+  }
+
+  .climate_variables {
+    background-color: #f1f1f1;
+    padding: 10px 24px;
+    display: block;
+    float: right;
+    width: 80%;
+    padding: 0px 15px 10px;
+  }
+
+  .climate_variables button {
+    padding: 10px 24px;
+    cursor: pointer;
+    margin-left: 1%;
+    margin-right: 1%;
+  }
+  /* Change color on hover */
+  .climate_variables button:hover {
+    background-color: blue;
+    color: white;
+  }
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+    /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+    @media screen and (max-width:600px) {
+      .column1 {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 
 
 
 <body>
-<h1>Benchly</h1>
+  <div class="header">
+    <h1>Benchly's Climate Model</h1>
+  </div>
 
-<h2>Timeseries</h2>
-Current scenario is {{scenario}} <br>
-Current climate variable is {{climvar}}<br>
+  <div class="row">
+    <div class="column1">
+      <h3>Climate Scenario</h3>
+      <p>Scenario: starting year, final emission</p>
 
-<h3>Choose the scenarios for the timeseries</h3>
-Scenario: starting year, final emission
-{% if climateinputs %}
-    <ul>
-    {% for inp in climateinputs %}
-        <li><a href="/benchly/{{ inp.scenario }}/{{climvar}}/{{ disp_scenario }}/{{ year }}">
-          {{ inp.scenario }}: {{ inp.start_year }},{{ inp.final_emiss }} </a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No scenarios are available.</p>
-{% endif %}
+      <div class="scenario-buttons">
+        {% if climateinputs %}
+          {% for inp in climateinputs %}
+            <button><a href="/benchly/{{ inp.scenario }}/{{climvar}}/{{ disp_scenario }}/{{ year }}">
+              {{ inp.scenario }}: {{ inp.start_year }},{{ inp.final_emiss }}</a> </button>
+          {% endfor %}
+        {% else %}
+          <p>No scenarios are available.</p>
+        {% endif %}
+      </div>
+    </div>
+    
+    <div class="climate_variables">
+      <h3>Climate Variables</h3>
+      {% for name, value in disp_outyear.get_fields %}
+      {% if name != 'id' and name != 'scenario' and name != 'year' %}
+        <button><a href="/benchly/{{ scenario }}/{{name}}/{{ disp_scenario }}/{{ year }}">{{name}}</a></button>
+      {% endif %}
+      {% endfor %}
+    </div>
 
-<h3>Select a climate variable</h1>
-<ul>
-  {% for climvar in climvars %}
-    <li><a href="/benchly/{{ scenario }}/{{climvar}}/{{ disp_scenario }}/{{ year }}">{{climvar}}</a></li>
-  {% endfor %}
-</ul>
+    <div class="column2" id="graph_area">
+      <!-- Time series figure -->
+      <!-- Django uses double brackets to render Python variables passed by the views to the templates. -->
+      {% autoescape off %}
+      {{ plot_div }}
+      {% endautoescape %}
+      <!-- End Dummy figure for Top Panel -->
+    </div>
+
+  </div>
 
 ================================================================================================================
 
-<h3>Display climate variables</h3>
-Current scenario is {{disp_scenario}} <br>
-Current year is {{year}}<br>
 
 
-Scenario: starting year, final emission
-{% if climateinputs %}
-    <ul>
-    {% for inp in climateinputs %}
-        <li><a href="/benchly/{{ scenario }}/{{climvar}}/{{ inp.scenario }}/{{year}}">
-          {{ inp.scenario }}: {{ inp.start_year }},{{ inp.final_emiss }} </a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No scenarios are available.</p>
-{% endif %}
+<div class="row">
+  <div class="column1">
+    <h3>Climate Scenario</h3>
+    <p>Scenario: starting year, final emission</p>
 
+    <div class="scenario-buttons">
+      {% if climateinputs %}
+        {% for inp in climateinputs %}
+          <button><a href="/benchly/{{ scenario }}/{{climvar}}/{{ inp.scenario }}/{{year}}#climvardisplay">
+            {{ inp.scenario }}: {{ inp.start_year }},{{ inp.final_emiss }}</a> </button>
+        {% endfor %}
+      {% else %}
+        <p>No scenarios are available.</p>
+      {% endif %}
+    </div>
+  </div>
 
-Scenario: starting year, final emission
-{% if climateinputs %}
-    <ul>
+  <div climate_variables>
+    <h3>Year</h3>
     {% for year in years %}
-        <li><a href="/benchly/{{ scenario }}/{{climvar}}/{{ disp_scenario }}/{{ year }}">
-           {{year}} </a></li>
+        <button><a href="/benchly/{{ scenario }}/{{climvar}}/{{ disp_scenario }}/{{ year }}#climvardisplay">
+           {{year}} </a></button>
     {% endfor %}
-    </ul>
-{% else %}
-    <p>No scenarios are available.</p>
-{% endif %}
+  </div>
+
+  <div class="column2" id="climvardisplay">
+    <br>
+    {% for name, value in disp_outyear.get_fields %}
+      {% if name != 'id' %}
+        {{ name }}: {{ value }} <br>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+</div>
 
 </body>
 

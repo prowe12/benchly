@@ -38,6 +38,9 @@ class ClimOutputs(models.Model):
     def __str__(self):
         return str(self.scenario) + ': ' + str(self.year)
 
+    def get_fields(self):
+        return [(field.name, field.value_to_string(self)) for field in ClimOutputs._meta.fields]
+
     class Meta:
         """
         Make scenario and year the primary key as per
@@ -48,6 +51,7 @@ class ClimOutputs(models.Model):
                 fields=['scenario', 'year'], name='unique_migration_host_combination'
             )
         ]
+
 
 class Display(models.Model):
     """
