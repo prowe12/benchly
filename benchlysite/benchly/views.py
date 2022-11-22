@@ -6,11 +6,23 @@ from django.urls import reverse
 from .models import Display, Timeseries, ClimInputs, ClimOutputs
 
 
-def index(request):
-    latest_list = ClimInputs.objects.all()
-    # order_by('user')[:]
+def index(request, scenario=1):
+    climateinputs = ClimInputs.objects.all()
+    climvars = ['atmos_co2', 'ocean_co2']
+    cinp = get_object_or_404(ClimInputs, scenario=scenario)
+    coutp = cinp.climoutputs_set.all()
+    years = [x.year for x in coutp]
+
+    climvar = climvars[0]
+    year = years[0]
     context = {
-        'latest_list': latest_list,
+        'climateinputs': climateinputs,
+        'climvars': climvars,
+        'years': years,
+        'scenario': scenario,
+        'climvar': climvar,
+        'disp_scenario': scenario,
+        'year': year,
     }
     # Wordier method:
     # template = loader.get_template('benchly/index.html')
@@ -18,32 +30,23 @@ def index(request):
     # Shortcut method:
     return render(request, 'benchly/index.html', context)
 
-
-def detail(request, scenario):
-    question = get_object_or_404(ClimInputs, scenario=scenario)
-    return render(request, 'benchly/detail.html', {'question': question})
-
-def results(request, scenario, year):
-    # response = "Scenario %s."
-    # return HttpResponse(response % scenario)
-    question = get_object_or_404(ClimInputs, scenario=scenario)
-    return render(request, 'benchly/results.html', {'question': question,'year':year})
-
-def vote(request, scenario):
-    question = get_object_or_404(ClimInputs, scenario=scenario)
-    try:
-        selected_choice = question.climoutputs_set.get(year=request.POST['choice'])
-    except (KeyError, ClimOutputs.DoesNotExist):
-        # Redisplay the question voting form.
-        return render(request, 'benchly/detail.html', {
-            'question': question,
-            'error_message': "You didn't select a choice.",
-        })
-    else:
-        # selected_choice.year += 1
-        # selected_choice.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
-        # return HttpResponseRedirect(reverse('results', args=(selected_choice.year)))
-        return HttpResponseRedirect(reverse('results', args=(question.scenario,request.POST['choice'])))
+def display(request, scenario=1, climvar=None, disp_scenario=1, year=None):
+    climateinputs = ClimInputs.objects.all()
+    climvars = ['atmos_co2', 'ocean_co2']
+    cinp = get_object_or_404(ClimInputs, scenario=scenario)
+    coutp = cinp.climoutputs_set.all()
+    years = [x.year for x in coutp]
+    if climvar is None:
+        climvar = climvars[0]
+    if year is None:
+        year = years[0]
+    context = {
+        'climateinputs': climateinputs,
+        'climvars': climvars,
+        'years': years,
+        'scenario': scenario,
+        'climvar': climvar,
+        'disp_scenario': disp_scenario,
+        'year': year,
+    }
+    return render(request, 'benchly/index.html', context)

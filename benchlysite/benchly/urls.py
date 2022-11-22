@@ -9,11 +9,6 @@ from . import views
 urlpatterns = [
     # index: /benchly/
     path('', views.index, name='index'),
-    # detail: /benchly/5/
-    path('<int:scenario>/', views.detail, name='detail'),
-    # results: /benchly/5/results/
-    path('<int:scenario>/<int:year>/results/', views.results, name='results'),
-    # vote: /benchly/5/vote/
-    path('<int:scenario>/vote/', views.vote, name='vote'),
+    # display: /benchly/3/atmos_co2/1/2022
+    path('<int:scenario>/<str:climvar>/<int:disp_scenario>/<int:year>', views.display, name='display'),
 ]
-#    path('<int:timeseries_scenario>/<int:disp_scenario>/', views.vote, name='vote'),

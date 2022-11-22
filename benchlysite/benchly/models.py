@@ -14,6 +14,7 @@ PlotTimeSeries: choose scenario and climate model variable to plot
 DisplayClimVars: choose scenario and year to display output variables for.
 """
 from django.db import models
+from django.forms import ModelForm
 import numpy as np
 
 class ClimInputs(models.Model):
@@ -60,16 +61,6 @@ class Display(models.Model):
     def __str__(self):
         return str(self.user)
 
-
-class TimeseriesVar(models.Model):
-    """ 
-    The climate variable that the user wishes to display a time series for
-    """
-    user = models.CharField(primary_key = True, max_length=20)
-    climvar = models.CharField(max_length=20)
-    def __str__(self):
-        return str(self.user) + str(self.climvar)
-
 class Timeseries(models.Model):
     """
     User inputs for displaying a time series of a particular climate variable for a scenario
@@ -92,6 +83,22 @@ class Timeseries(models.Model):
             )
         ]
 
+
+
+class TimeseriesVar(models.Model):
+    """ 
+    The climate variable that the user wishes to display a time series for
+    """
+    user = models.CharField(primary_key = True, max_length=20)
+    climvar = models.CharField(max_length=20)
+    def __str__(self):
+        return str(self.user) + str(self.climvar)
+
+
+class TimeseriesVarForm(ModelForm):
+    class Meta:
+            model = TimeseriesVar
+            fields = ['user', 'climvar']
 
 
 

@@ -1,12 +1,77 @@
 
-<h1>Click on a scenario for displaying climate variables</h1>
+
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Benchly</title>
+  <!-- Keep this line in the head-->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
+
+
+<body>
+<h1>Benchly</h1>
+
+<h2>Timeseries</h2>
+Current scenario is {{scenario}} <br>
+Current climate variable is {{climvar}}<br>
+
+<h3>Choose the scenarios for the timeseries</h3>
 Scenario: starting year, final emission
-{% if latest_list %}
+{% if climateinputs %}
     <ul>
-    {% for question in latest_list %}
-        <li><a href="/benchly/{{ question.scenario }}/">{{ question.scenario }}: {{ question.start_year }},{{ question.final_emiss }} </a></li>
+    {% for inp in climateinputs %}
+        <li><a href="/benchly/{{ inp.scenario }}/{{climvar}}/{{ disp_scenario }}/{{ year }}">
+          {{ inp.scenario }}: {{ inp.start_year }},{{ inp.final_emiss }} </a></li>
     {% endfor %}
     </ul>
 {% else %}
     <p>No scenarios are available.</p>
 {% endif %}
+
+<h3>Select a climate variable</h1>
+<ul>
+  {% for climvar in climvars %}
+    <li><a href="/benchly/{{ scenario }}/{{climvar}}/{{ disp_scenario }}/{{ year }}">{{climvar}}</a></li>
+  {% endfor %}
+</ul>
+
+================================================================================================================
+
+<h3>Display climate variables</h3>
+Current scenario is {{disp_scenario}} <br>
+Current year is {{year}}<br>
+
+
+Scenario: starting year, final emission
+{% if climateinputs %}
+    <ul>
+    {% for inp in climateinputs %}
+        <li><a href="/benchly/{{ scenario }}/{{climvar}}/{{ inp.scenario }}/{{year}}">
+          {{ inp.scenario }}: {{ inp.start_year }},{{ inp.final_emiss }} </a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No scenarios are available.</p>
+{% endif %}
+
+
+Scenario: starting year, final emission
+{% if climateinputs %}
+    <ul>
+    {% for year in years %}
+        <li><a href="/benchly/{{ scenario }}/{{climvar}}/{{ disp_scenario }}/{{ year }}">
+           {{year}} </a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No scenarios are available.</p>
+{% endif %}
+
+</body>
+
+</html>
