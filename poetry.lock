@@ -38,6 +38,14 @@ python-versions = ">=3.6"
 Django = ">=3.2"
 
 [[package]]
+name = "numpy"
+version = "1.23.5"
+description = "NumPy is the fundamental package for array computing with Python."
+category = "main"
+optional = false
+python-versions = ">=3.8"
+
+[[package]]
 name = "plotly"
 version = "5.11.0"
 description = "An open-source, interactive data visualization library for Python"
@@ -78,7 +86,7 @@ python-versions = ">=2"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "bf953888b78097006adb489fa6179aa0f979db7705c607af3db640d8c3882451"
+content-hash = "1a4487cf6c23268d59956ec93f57dec68acbf5a74de19597339ea6d290c611df"
 
 [metadata.files]
 asgiref = [
@@ -87,6 +95,7 @@ asgiref = [
 ]
 django = []
 django-extensions = []
+numpy = []
 plotly = []
 sqlparse = []
 tenacity = []
