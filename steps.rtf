@@ -1,12 +1,12 @@
 {\rtf1\ansi\ansicpg1252\cocoartf2639
 \cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 Menlo-Regular;\f2\froman\fcharset0 Times-Roman;
 \f3\fmodern\fcharset0 Courier;\f4\fnil\fcharset0 Menlo-Bold;}
-{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red0\green0\blue0;\red255\green255\blue255;
-\red46\green174\blue187;\red109\green109\blue109;\red23\green23\blue23;\red70\green137\blue204;\red202\green202\blue202;
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red255\green255\blue255;\red0\green0\blue0;
+\red46\green174\blue187;\red0\green0\blue0;\red109\green109\blue109;\red70\green137\blue204;\red202\green202\blue202;
 \red140\green211\blue254;\red194\green126\blue101;\red212\green214\blue154;\red67\green192\blue160;\red167\green197\blue152;
 \red183\green111\blue179;\red89\green138\blue67;}
-{\*\expandedcolortbl;;\csgray\c0;\cssrgb\c0\c0\c0;\csgray\c100000;
-\cssrgb\c20199\c73241\c78251;\cssrgb\c50196\c50196\c50196;\cssrgb\c11765\c11765\c11765;\cssrgb\c33725\c61176\c83922;\cssrgb\c83137\c83137\c83137;
+{\*\expandedcolortbl;;\csgray\c0;\csgray\c100000;\cssrgb\c0\c0\c0;
+\cssrgb\c20199\c73241\c78251;\csgray\c0\c0;\cssrgb\c50196\c50196\c50196;\cssrgb\c33725\c61176\c83922;\cssrgb\c83137\c83137\c83137;
 \cssrgb\c61176\c86275\c99608;\cssrgb\c80784\c56863\c47059;\cssrgb\c86275\c86275\c66667;\cssrgb\c30588\c78824\c69020;\cssrgb\c70980\c80784\c65882;
 \cssrgb\c77255\c52549\c75294;\cssrgb\c41569\c60000\c33333;}
 \margl1440\margr1440\vieww11820\viewh8700\viewkind0
@@ -19,7 +19,7 @@ The html code would include the javascript and css\
 \
 Flask and Django are static site generator (maybe)\
 If you want to update the site, you run your build code\
-This builds the templates into html/JS/CSS (mostly just html to be honest)\
+This builds the templates into html/JS/CSS\
 e.g. once per edit\
 \
 Php does the same build process, but does it every time the user requests the page.\
@@ -71,6 +71,7 @@ $ poetry new benchly\
 8) $ poetry add Django\
 9) $ poetry run django-admin startproject benchly  \
 This creates benchly/benchly within Benchley\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
 \f3\fs26 \cf0 \expnd0\expndtw0\kerning0
 \CocoaLigature1 10) $ cd benchly/benchly/\
@@ -80,11 +81,12 @@ This creates benchly/benchly within Benchley\
 \CocoaLigature1 \
 11b) $ poetry run python manage.py migrate\
 12) $ 
-\f1\fs22 \cf2 \kerning1\expnd0\expndtw0 \CocoaLigature0 poetry run \cf4 \cb2 python manage.py runserver
+\f1\fs22 \cf2 \kerning1\expnd0\expndtw0 \CocoaLigature0 poetry run \cf3 \cb2 python manage.py runserver
 \f3\fs26 \cf0 \cb1 \expnd0\expndtw0\kerning0
 \CocoaLigature1 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\f0\fs24 \kerning1\expnd0\expndtw0 13) But we forgot to add the app:\
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0 13) But we forgot to add the app:\
 \pard\pardeftab720\partightenfactor0
 
 \f3\fs26 \cf0 \expnd0\expndtw0\kerning0
@@ -105,16 +107,18 @@ Run on server\
 $ cd benchly\
 $ poetry install\
 $ cd benchly\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\f3\fs26 \expnd0\expndtw0\kerning0
+\f3\fs26 \cf0 \expnd0\expndtw0\kerning0
 $ poetry run python manage.py migrate\
 (No migrations to apply)\
 $ 
-\f1\fs22 \cf2 \kerning1\expnd0\expndtw0 \CocoaLigature0 poetry run \cf4 \cb2 python manage.py runserver
+\f1\fs22 \cf2 \kerning1\expnd0\expndtw0 \CocoaLigature0 poetry run \cf3 \cb2 python manage.py runserver
 \f3\fs26 \cf0 \cb1 \expnd0\expndtw0\kerning0
 \CocoaLigature1 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\f0\fs24 \kerning1\expnd0\expndtw0 \
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0 \
 \
 Add html files: https://www.thecrazyprogrammer.com/2018/11/how-to-add-html-template-in-django.html\
 \
@@ -135,10 +139,10 @@ VS Code is not seeing my dependencies. Tried typing:\
 \pard\pardeftab720\partightenfactor0
 
 \f3\fs26 \cf0 \expnd0\expndtw0\kerning0
-\outl0\strokewidth0 \strokec3 $ poetry shell\
+$ poetry shell\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\f0\fs24 \cf0 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 To get the location of my virtual environment, then selected it from vscode by clicking the python version in the lower right and selecting the one from my virtual environment. After that, the django imports were not marked with errors, but my own package imports still were. Tried a few other things before quitting for now. Will try again later. \
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0 To get the location of my virtual environment, then selected it from vscode by clicking the python version in the lower right and selecting the one from my virtual environment. After that, the django imports were not marked with errors, but my own package imports still were. Tried a few other things before quitting for now. Will try again later. \
 \
 Add myself to be a superuser so I can access the admin page\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
@@ -162,9 +166,9 @@ Create the database as in https://towardsdatascience.com/use-python-scripts-to-i
 1) Edit the models.py file to create a class for each database\
 2) 
 \f2 \expnd0\expndtw0\kerning0
-\outl0\strokewidth0 \strokec3 Apply the migrations files to create the tables in the database\
+Apply the migrations files to create the tables in the database\
 $ 
-\f0 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 poetry run 
+\f0 \kerning1\expnd0\expndtw0 poetry run 
 \f3\fs26 \expnd0\expndtw0\kerning0
 python manage.py 
 \f1\fs22 \cf2 \kerning1\expnd0\expndtw0 \CocoaLigature0 makemigrations\
@@ -183,7 +187,7 @@ python manage.py
 \cf0 4) Migrate\
 $ poetry run 
 \f3\fs26 \expnd0\expndtw0\kerning0
-\outl0\strokewidth0 \strokec3 python manage.py migrate\
+python manage.py migrate\
 5) Check for errors\
 $ poetry run python manage.py check\
 6) Create the scripts as described in the url above\
@@ -192,114 +196,105 @@ $ poetry run python manage.py runscript load_inputs\
 \
 \pard\pardeftab720\sa240\partightenfactor0
 
-\f2\fs24 \cf0 \strokec3 \
+\f2\fs24 \cf4 \cb6 \
 \pard\pardeftab720\partightenfactor0
-
-\f1 \cf6 \cb7 \strokec6 <\cf8 \strokec8 form\cf9 \strokec9  \cf10 \strokec10 action\cf9 \strokec9 =\cf11 \strokec11 "\{% url 'vote' question.scenario %\}"\cf9 \strokec9  \cf10 \strokec10 method\cf9 \strokec9 =\cf11 \strokec11 "post"\cf6 \strokec6 >\cf9 \cb1 \strokec9 \
-\pard\pardeftab720\partightenfactor0
-\cf9 \cb7     \{% csrf_token %\}\cb1 \
-\cb7     \cf6 \strokec6 <\cf8 \strokec8 fieldset\cf6 \strokec6 >\cf9 \cb1 \strokec9 \
-\cb7         \cf6 \strokec6 <\cf8 \strokec8 legend\cf6 \strokec6 ><\cf8 \strokec8 h1\cf6 \strokec6 >\cf9 \strokec9 Select a scenario\cf6 \strokec6 </\cf8 \strokec8 h1\cf6 \strokec6 ></\cf8 \strokec8 legend\cf6 \strokec6 >\cf9 \cb1 \strokec9 \
-\cb7         \{% if error_message %\}\cf6 \strokec6 <\cf8 \strokec8 p\cf6 \strokec6 ><\cf8 \strokec8 strong\cf6 \strokec6 >\cf9 \strokec9 \{\{ error_message \}\}\cf6 \strokec6 </\cf8 \strokec8 strong\cf6 \strokec6 ></\cf8 \strokec8 p\cf6 \strokec6 >\cf9 \strokec9 \{% endif %\}\cb1 \
-\cb7         \{% for choice in climateinputs.scenario %\}\cb1 \
-\cb7             \cf6 \strokec6 <\cf8 \strokec8 input\cf9 \strokec9  \cf10 \strokec10 type\cf9 \strokec9 =\cf11 \strokec11 "radio"\cf9 \strokec9  \cf10 \strokec10 name\cf9 \strokec9 =\cf11 \strokec11 "choice"\cf9 \strokec9  \cf10 \strokec10 id\cf9 \strokec9 =\cf11 \strokec11 "choice\{\{ forloop.counter \}\}"\cf9 \strokec9  \cf10 \strokec10 value\cf9 \strokec9 =\cf11 \strokec11 "\{\{ choice.year \}\}"\cf6 \strokec6 >\cf9 \cb1 \strokec9 \
-\cb7             \cf6 \strokec6 <\cf8 \strokec8 label\cf9 \strokec9  \cf10 \strokec10 for\cf9 \strokec9 =\cf11 \strokec11 "choice\{\{ forloop.counter \}\}"\cf6 \strokec6 >\cf9 \strokec9 \{\{ choice.year \}\}\cf6 \strokec6 </\cf8 \strokec8 label\cf6 \strokec6 ><\cf8 \strokec8 br\cf6 \strokec6 >\cf9 \cb1 \strokec9 \
-\cb7         \{% endfor %\}\cb1 \
-\cb7     \cf6 \strokec6 </\cf8 \strokec8 fieldset\cf6 \strokec6 >\cf9 \cb1 \strokec9 \
-\cb7     \cf6 \strokec6 <\cf8 \strokec8 input\cf9 \strokec9  \cf10 \strokec10 type\cf9 \strokec9 =\cf11 \strokec11 "submit"\cf9 \strokec9  \cf10 \strokec10 value\cf9 \strokec9 =\cf11 \strokec11 "Select"\cf6 \strokec6 >\cf9 \cb1 \strokec9 \
-\pard\pardeftab720\partightenfactor0
-\cf6 \cb7 \strokec6 </\cf8 \strokec8 form\cf6 \strokec6 >\cf9 \cb1 \strokec9 \
+\cf4 <form action="\{% url 'vote' question.scenario %\}" method="post">\
+    \{% csrf_token %\}\
+    <fieldset>\
+        <legend><h1>Select a scenario</h1></legend>\
+        \{% if error_message %\}<p><strong>\{\{ error_message \}\}</strong></p>\{% endif %\}\
+        \{% for choice in climateinputs.scenario %\}\
+            <input type="radio" name="choice" id="choice\{\{ forloop.counter \}\}" value="\{\{ choice.year \}\}">\
+            <label for="choice\{\{ forloop.counter \}\}">\{\{ choice.year \}\}</label><br>\
+        \{% endfor %\}\
+    </fieldset>\
+    <input type="submit" value="Select">\
+</form>\
 \
 \
-\pard\pardeftab720\partightenfactor0
-\cf9 \
-\
-\cf8 \cb7 \strokec8 def\cf9 \strokec9  \cf12 \cb7 \strokec12 timeseries\cf9 \cb7 \strokec9 (\cf10 \strokec10 request\cf9 \strokec9 , \cf10 \strokec10 scenario\cf9 \strokec9 ):\cb1 \
-\cb7     \cf10 \strokec10 climateinputs\cf9 \strokec9  = \cf13 \cb7 \strokec13 ClimInputs\cf9 \cb7 \strokec9 .\cf10 \strokec10 objects\cf9 \strokec9 .\cf12 \cb7 \strokec12 all\cf9 \cb7 \strokec9 ()\cb1 \
-\cb7     \cf10 \strokec10 climvars\cf9 \strokec9  = [\cf11 \strokec11 'atmos_co2'\cf9 \strokec9 , \cf11 \strokec11 'ocean_co2'\cf9 \strokec9 ]\cb1 \
-\cb7     \cf10 \strokec10 context\cf9 \strokec9  = \{\cb1 \
-\cb7         \cf11 \strokec11 'climateinputs'\cf9 \strokec9 : \cf10 \strokec10 climateinputs\cf9 \strokec9 ,\cb1 \
-\cb7         \cf11 \strokec11 'scenario'\cf9 \strokec9 : \cf10 \strokec10 scenario\cf9 \strokec9 ,\cb1 \
-\cb7         \cf11 \strokec11 'climvars'\cf9 \strokec9 : \cf10 \strokec10 climvars\cf9 \strokec9 ,\cb1 \
-\cb7         \cf11 \strokec11 'climvar'\cf9 \strokec9 : \cf10 \strokec10 climvars\cf9 \strokec9 [\cf14 \cb7 \strokec14 0\cf9 \cb7 \strokec9 ],\cb1 \
-\cb7     \}\cb1 \
-\cb7     \cf15 \cb7 \strokec15 return\cf9 \cb7 \strokec9  \cf12 \cb7 \strokec12 render\cf9 \cb7 \strokec9 (\cf10 \strokec10 request\cf9 \strokec9 , \cf11 \strokec11 'benchly/index.html'\cf9 \strokec9 , \cf10 \strokec10 context\cf9 \strokec9 )\cb1 \
-\cb7     \cf16 \cb7 \strokec16 # question = get_object_or_404(ClimInputs, scenario=scenario)\cf9 \cb1 \strokec9 \
-\cb7     \cf16 \cb7 \strokec16 #return render(request, 'benchly/timeseries.html', \{'question': question\})\cf9 \cb1 \strokec9 \
-\cb7     \cf16 \cb7 \strokec16 #return HttpResponseRedirect(reverse('index', args=(scenario,)))\cf9 \cb1 \strokec9 \
 \
 \
-\cf8 \cb7 \strokec8 def\cf9 \strokec9  \cf12 \cb7 \strokec12 timeseries2\cf9 \cb7 \strokec9 (\cf10 \strokec10 request\cf9 \strokec9 , \cf10 \strokec10 scenario\cf9 \strokec9 , \cf10 \strokec10 climvar\cf9 \strokec9 ):\cb1 \
-\cb7     \cf10 \strokec10 climateinputs\cf9 \strokec9  = \cf13 \cb7 \strokec13 ClimInputs\cf9 \cb7 \strokec9 .\cf10 \strokec10 objects\cf9 \strokec9 .\cf12 \cb7 \strokec12 all\cf9 \cb7 \strokec9 ()\cb1 \
-\cb7     \cf10 \strokec10 climvars\cf9 \strokec9  = [\cf11 \strokec11 'atmos_co2'\cf9 \strokec9 , \cf11 \strokec11 'ocean_co2'\cf9 \strokec9 ]\cb1 \
-\cb7     \cf10 \strokec10 context\cf9 \strokec9  = \{\cb1 \
-\cb7         \cf11 \strokec11 'climateinputs'\cf9 \strokec9 : \cf10 \strokec10 climateinputs\cf9 \strokec9 ,\cb1 \
-\cb7         \cf11 \strokec11 'scenario'\cf9 \strokec9 : \cf10 \strokec10 scenario\cf9 \strokec9 ,\cb1 \
-\cb7         \cf11 \strokec11 'climvars'\cf9 \strokec9 : \cf10 \strokec10 climvars\cf9 \strokec9 ,\cb1 \
-\cb7         \cf11 \strokec11 'climvar'\cf9 \strokec9 : \cf10 \strokec10 climvar\cf9 \strokec9 ,\cb1 \
-\cb7     \}\cb1 \
-\cb7     \cf15 \cb7 \strokec15 return\cf9 \cb7 \strokec9  \cf12 \cb7 \strokec12 render\cf9 \cb7 \strokec9 (\cf10 \strokec10 request\cf9 \strokec9 , \cf11 \strokec11 'benchly/index.html'\cf9 \strokec9 , \cf10 \strokec10 context\cf9 \strokec9 )\cb1 \
+def timeseries(request, scenario):\
+    climateinputs = ClimInputs.objects.all()\
+    climvars = ['atmos_co2', 'ocean_co2']\
+    context = \{\
+        'climateinputs': climateinputs,\
+        'scenario': scenario,\
+        'climvars': climvars,\
+        'climvar': climvars[0],\
+    \}\
+    return render(request, 'benchly/index.html', context)\
+    # question = get_object_or_404(ClimInputs, scenario=scenario)\
+    #return render(request, 'benchly/timeseries.html', \{'question': question\})\
+    #return HttpResponseRedirect(reverse('index', args=(scenario,)))\
 \
 \
-\cf8 \cb7 \strokec8 def\cf9 \strokec9  \cf12 \cb7 \strokec12 detail\cf9 \cb7 \strokec9 (\cf10 \strokec10 request\cf9 \strokec9 , \cf10 \strokec10 scenario\cf9 \strokec9 ):\cb1 \
-\cb7     \cf10 \strokec10 question\cf9 \strokec9  = \cf12 \cb7 \strokec12 get_object_or_404\cf9 \cb7 \strokec9 (\cf13 \cb7 \strokec13 ClimInputs\cf9 \cb7 \strokec9 , \cf10 \strokec10 scenario\cf9 \strokec9 =\cf10 \strokec10 scenario\cf9 \strokec9 )\cb1 \
-\cb7     \cf15 \cb7 \strokec15 return\cf9 \cb7 \strokec9  \cf12 \cb7 \strokec12 render\cf9 \cb7 \strokec9 (\cf10 \strokec10 request\cf9 \strokec9 , \cf11 \strokec11 'benchly/detail.html'\cf9 \strokec9 , \{\cf11 \strokec11 'question'\cf9 \strokec9 : \cf10 \strokec10 question\cf9 \strokec9 \})\cb1 \
+def timeseries2(request, scenario, climvar):\
+    climateinputs = ClimInputs.objects.all()\
+    climvars = ['atmos_co2', 'ocean_co2']\
+    context = \{\
+        'climateinputs': climateinputs,\
+        'scenario': scenario,\
+        'climvars': climvars,\
+        'climvar': climvar,\
+    \}\
+    return render(request, 'benchly/index.html', context)\
 \
-\cf8 \cb7 \strokec8 def\cf9 \strokec9  \cf12 \cb7 \strokec12 results\cf9 \cb7 \strokec9 (\cf10 \strokec10 request\cf9 \strokec9 , \cf10 \strokec10 scenario\cf9 \strokec9 , \cf10 \strokec10 year\cf9 \strokec9 ):\cb1 \
-\cb7     \cf16 \cb7 \strokec16 # response = "Scenario %s."\cf9 \cb1 \strokec9 \
-\cb7     \cf16 \cb7 \strokec16 # return HttpResponse(response % scenario)\cf9 \cb1 \strokec9 \
-\cb7     \cf10 \strokec10 question\cf9 \strokec9  = \cf12 \cb7 \strokec12 get_object_or_404\cf9 \cb7 \strokec9 (\cf13 \cb7 \strokec13 ClimInputs\cf9 \cb7 \strokec9 , \cf10 \strokec10 scenario\cf9 \strokec9 =\cf10 \strokec10 scenario\cf9 \strokec9 )\cb1 \
-\cb7     \cf15 \cb7 \strokec15 return\cf9 \cb7 \strokec9  \cf12 \cb7 \strokec12 render\cf9 \cb7 \strokec9 (\cf10 \strokec10 request\cf9 \strokec9 , \cf11 \strokec11 'benchly/results.html'\cf9 \strokec9 , \{\cf11 \strokec11 'question'\cf9 \strokec9 : \cf10 \strokec10 question\cf9 \strokec9 ,\cf11 \strokec11 'year'\cf9 \strokec9 :\cf10 \strokec10 year\cf9 \strokec9 \})\cb1 \
 \
-\cf8 \cb7 \strokec8 def\cf9 \strokec9  \cf12 \cb7 \strokec12 vote\cf9 \cb7 \strokec9 (\cf10 \strokec10 request\cf9 \strokec9 , \cf10 \strokec10 scenario\cf9 \strokec9 ):\cb1 \
-\cb7     \cf10 \strokec10 question\cf9 \strokec9  = \cf12 \cb7 \strokec12 get_object_or_404\cf9 \cb7 \strokec9 (\cf13 \cb7 \strokec13 ClimInputs\cf9 \cb7 \strokec9 , \cf10 \strokec10 scenario\cf9 \strokec9 =\cf10 \strokec10 scenario\cf9 \strokec9 )\cb1 \
-\cb7     \cf15 \cb7 \strokec15 try\cf9 \cb7 \strokec9 :\cb1 \
-\cb7         \cf10 \strokec10 selected_choice\cf9 \strokec9  = \cf10 \strokec10 question\cf9 \strokec9 .climoutputs_set.get(\cf10 \strokec10 year\cf9 \strokec9 =\cf10 \strokec10 request\cf9 \strokec9 .POST[\cf11 \strokec11 'choice'\cf9 \strokec9 ])\cb1 \
-\cb7     \cf15 \cb7 \strokec15 except\cf9 \cb7 \strokec9  (\cf13 \cb7 \strokec13 KeyError\cf9 \cb7 \strokec9 , \cf13 \cb7 \strokec13 ClimOutputs\cf9 \cb7 \strokec9 .\cf13 \cb7 \strokec13 DoesNotExist\cf9 \cb7 \strokec9 ):\cb1 \
-\cb7         \cf16 \cb7 \strokec16 # Redisplay the question voting form.\cf9 \cb1 \strokec9 \
-\cb7         \cf15 \cb7 \strokec15 return\cf9 \cb7 \strokec9  \cf12 \cb7 \strokec12 render\cf9 \cb7 \strokec9 (\cf10 \strokec10 request\cf9 \strokec9 , \cf11 \strokec11 'benchly/detail.html'\cf9 \strokec9 , \{\cb1 \
-\cb7             \cf11 \strokec11 'question'\cf9 \strokec9 : \cf10 \strokec10 question\cf9 \strokec9 ,\cb1 \
-\cb7             \cf11 \strokec11 'error_message'\cf9 \strokec9 : \cf11 \strokec11 "You didn't select a choice."\cf9 \strokec9 ,\cb1 \
-\cb7         \})\cb1 \
-\cb7     \cf15 \cb7 \strokec15 else\cf9 \cb7 \strokec9 :\cb1 \
-\cb7         \cf16 \cb7 \strokec16 # selected_choice.year += 1\cf9 \cb1 \strokec9 \
-\cb7         \cf16 \cb7 \strokec16 # selected_choice.save()\cf9 \cb1 \strokec9 \
-\cb7         \cf16 \cb7 \strokec16 # Always return an HttpResponseRedirect after successfully dealing\cf9 \cb1 \strokec9 \
-\cb7         \cf16 \cb7 \strokec16 # with POST data. This prevents data from being posted twice if a\cf9 \cb1 \strokec9 \
-\cb7         \cf16 \cb7 \strokec16 # user hits the Back button.\cf9 \cb1 \strokec9 \
-\cb7         \cf16 \cb7 \strokec16 # return HttpResponseRedirect(reverse('results', args=(selected_choice.year)))\cf9 \cb1 \strokec9 \
-\cb7         \cf15 \cb7 \strokec15 return\cf9 \cb7 \strokec9  \cf13 \cb7 \strokec13 HttpResponseRedirect\cf9 \cb7 \strokec9 (\cf12 \cb7 \strokec12 reverse\cf9 \cb7 \strokec9 (\cf11 \strokec11 'results'\cf9 \strokec9 , \cf10 \strokec10 args\cf9 \strokec9 =(\cf10 \strokec10 question\cf9 \strokec9 .\cf10 \strokec10 scenario\cf9 \strokec9 ,\cf10 \strokec10 request\cf9 \strokec9 .POST[\cf11 \strokec11 'choice'\cf9 \strokec9 ])))\cb1 \
-\pard\pardeftab720\partightenfactor0
-\cf9 \
+def detail(request, scenario):\
+    question = get_object_or_404(ClimInputs, scenario=scenario)\
+    return render(request, 'benchly/detail.html', \{'question': question\})\
+\
+def results(request, scenario, year):\
+    # response = "Scenario %s."\
+    # return HttpResponse(response % scenario)\
+    question = get_object_or_404(ClimInputs, scenario=scenario)\
+    return render(request, 'benchly/results.html', \{'question': question,'year':year\})\
+\
+def vote(request, scenario):\
+    question = get_object_or_404(ClimInputs, scenario=scenario)\
+    try:\
+        selected_choice = question.climoutputs_set.get(year=request.POST['choice'])\
+    except (KeyError, ClimOutputs.DoesNotExist):\
+        # Redisplay the question voting form.\
+        return render(request, 'benchly/detail.html', \{\
+            'question': question,\
+            'error_message': "You didn't select a choice.",\
+        \})\
+    else:\
+        # selected_choice.year += 1\
+        # selected_choice.save()\
+        # Always return an HttpResponseRedirect after successfully dealing\
+        # with POST data. This prevents data from being posted twice if a\
+        # user hits the Back button.\
+        # return HttpResponseRedirect(reverse('results', args=(selected_choice.year)))\
+        return HttpResponseRedirect(reverse('results', args=(question.scenario,request.POST['choice'])))\
+\
 \
 \
 urls.py\
-\pard\pardeftab720\partightenfactor0
-\cf9 \cb7     \cf16 \cb7 \strokec16 # timeseries: /benchly/ts/3/\cf9 \cb1 \strokec9 \
-\cb7     \cf12 \cb7 \strokec12 path\cf9 \cb7 \strokec9 (\cf11 \strokec11 'ts/<int:scenario>/'\cf9 \strokec9 , \cf13 \cb7 \strokec13 views\cf9 \cb7 \strokec9 .\cf12 \cb7 \strokec12 timeseries\cf9 \cb7 \strokec9 , \cf10 \strokec10 name\cf9 \strokec9 =\cf11 \strokec11 'timeseries'\cf9 \strokec9 ),\cb1 \
-\cb7     \cf16 \cb7 \strokec16 # timeseries2: /benchly/ts/3/atmos_co2/\cf9 \cb1 \strokec9 \
-\cb7     \cf12 \cb7 \strokec12 path\cf9 \cb7 \strokec9 (\cf11 \strokec11 'ts/<int:scenario>/<str:climvar>'\cf9 \strokec9 , \cf13 \cb7 \strokec13 views\cf9 \cb7 \strokec9 .\cf12 \cb7 \strokec12 timeseries2\cf9 \cb7 \strokec9 , \cf10 \strokec10 name\cf9 \strokec9 =\cf11 \strokec11 'timeseries2'\cf9 \strokec9 ),\cb1 \
+    # timeseries: /benchly/ts/3/\
+    path('ts/<int:scenario>/', views.timeseries, name='timeseries'),\
+    # timeseries2: /benchly/ts/3/atmos_co2/\
+    path('ts/<int:scenario>/<str:climvar>', views.timeseries2, name='timeseries2'),\
 \
-\cb7     \cf16 \cb7 \strokec16 # detail: benchly/3/\cf9 \cb1 \strokec9 \
-\cb7     \cf12 \cb7 \strokec12 path\cf9 \cb7 \strokec9 (\cf11 \strokec11 '<int:scenario>/'\cf9 \strokec9 , \cf13 \cb7 \strokec13 views\cf9 \cb7 \strokec9 .detail, \cf10 \strokec10 name\cf9 \strokec9 =\cf11 \strokec11 'detail'\cf9 \strokec9 ),\cb1 \
-\cb7     \cf16 \cb7 \strokec16 # results: /benchly/5/results/\cf9 \cb1 \strokec9 \
-\cb7     \cf12 \cb7 \strokec12 path\cf9 \cb7 \strokec9 (\cf11 \strokec11 '<int:scenario>/<int:year>/results/'\cf9 \strokec9 , \cf13 \cb7 \strokec13 views\cf9 \cb7 \strokec9 .results, \cf10 \strokec10 name\cf9 \strokec9 =\cf11 \strokec11 'results'\cf9 \strokec9 ),\cb1 \
-\cb7     \cf16 \cb7 \strokec16 # vote: /benchly/5/vote/\cf9 \cb1 \strokec9 \
-\cb7     \cf12 \cb7 \strokec12 path\cf9 \cb7 \strokec9 (\cf11 \strokec11 '<int:scenario>/vote/'\cf9 \strokec9 , \cf13 \cb7 \strokec13 views\cf9 \cb7 \strokec9 .vote, \cf10 \strokec10 name\cf9 \strokec9 =\cf11 \strokec11 'vote'\cf9 \strokec9 ),\cb1 \
+    # detail: benchly/3/\
+    path('<int:scenario>/', views.detail, name='detail'),\
+    # results: /benchly/5/results/\
+    path('<int:scenario>/<int:year>/results/', views.results, name='results'),\
+    # vote: /benchly/5/vote/\
+    path('<int:scenario>/vote/', views.vote, name='vote'),\
 \pard\pardeftab720\partightenfactor0
-\cf16 \cb7 \strokec16 #    path('<int:timeseries_scenario>/<int:disp_scenario>/', views.vote, name='vote'),\cf9 \cb1 \strokec9 \
+\cf4 #    path('<int:timeseries_scenario>/<int:disp_scenario>/', views.vote, name='vote'),\
 \
-\pard\pardeftab720\partightenfactor0
-\cf9 \
 \
-\pard\pardeftab720\partightenfactor0
-\cf9 \cb7     \cf6 \strokec6 <\cf8 \strokec8 div\cf9 \strokec9  \cf10 \strokec10 class\cf9 \strokec9 =\cf11 \strokec11 "climate_variables"\cf6 \strokec6 >\cf9 \cb1 \strokec9 \
-\cb7       \cf6 \strokec6 <\cf8 \strokec8 h3\cf6 \strokec6 >\cf9 \strokec9 Climate Variables\cf6 \strokec6 </\cf8 \strokec8 h3\cf6 \strokec6 >\cf9 \cb1 \strokec9 \
-\cb7       \{% for name, value in disp_outyear.get_fields %\}\cb1 \
-\cb7       \cf6 \strokec6 <\cf8 \strokec8 button\cf6 \strokec6 ><\cf8 \strokec8 a\cf9 \strokec9  \cf10 \strokec10 href\cf9 \strokec9 =\cf11 \strokec11 "/benchly/\{\{ scenario \}\}/\{\{climvar\}\}/\{\{ disp_scenario \}\}/\{\{ year \}\}"\cf6 \strokec6 >\cf9 \strokec9 \{\{climvar\}\}\cf6 \strokec6 </\cf8 \strokec8 a\cf6 \strokec6 ></\cf8 \strokec8 button\cf6 \strokec6 >\cf9 \cb1 \strokec9 \
-\cb7       \{% endfor %\}\cb1 \
-\cb7     \cf6 \strokec6 </\cf8 \strokec8 div\cf6 \strokec6 >\cf9 \cb1 \strokec9 \
 \
-\pard\pardeftab720\partightenfactor0
-\cf9 \
+    <div class="climate_variables">\
+      <h3>Climate Variables</h3>\
+      \{% for name, value in disp_outyear.get_fields %\}\
+      <button><a href="/benchly/\{\{ scenario \}\}/\{\{climvar\}\}/\{\{ disp_scenario \}\}/\{\{ year \}\}">\{\{climvar\}\}</a></button>\
+      \{% endfor %\}\
+    </div>\
+\
+\
 }
