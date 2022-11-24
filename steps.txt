@@ -1,0 +1,222 @@
+Php is a backend. It’s a dynamic site generator
+Run php page.
+When someone makes a request, it builds an html page on the fly and sends that back
+The html code would include the javascript and css
+
+Flask and Django are static site generator (maybe)
+If you want to update the site, you run your build code
+This builds the templates into html/JS/CSS
+e.g. once per edit
+
+Php does the same build process, but does it every time the user requests the page.
+e.g. once per page request
+
+PhP stuff that I am going to have to replicate in Django
+Create a template file that includes some Html stuff
+Query the database
+Fill out the html table from the query results
+Put it in a new website that the user is redirected to 
+
+Django/Flask emulate the same thing
+Likely less efficient
+
+Dynamic means html can be different for same url
+
+
+Getting to the server:
+$ ssh exouser@149.165.172.29
+$ password: AHEM BE EDGY FEE LAY SAVE LUNG DESK SHOE EAR ROSA
+IP address: 149.165.172.29
+
+Steps done on server:
+1) install poetry via:
+$ curl -sSL https://install.python-poetry.org | python3 -
+2) Did not work. Tried the following:
+$ sudo apt install python3-poetry
+3) ModuleNotFoundError: No module named 'cachecontrol'
+$ python3 -m pip install cachecontrol
+4) Success!
+5) Create the repo:
+$ poetry new benchly
+6) $ git clone https://github.com/prowe12/benchly.git
+7) On local computer, $ poetry init
+8) $ poetry add Django
+9) $ poetry run django-admin startproject benchly  
+This creates benchly/benchly within Benchley
+10) $ cd benchly/benchly/
+11a) $ poetry run python manage.py makemigrations my_app
+11b) $ poetry run python manage.py migrate
+12) $ poetry run python manage.py runserver
+13) But we forgot to add the app:
+$ poetry run python manage.py startapp my_app
+14) Add a view (see tutorial)
+15) Run the server (first cd to the dir with manage.py!)
+$ poetry run python manage.py runserver
+16)  $ Ctrl C  (quit the server)
+17) $ add/commit/push
+
+Back on server, pull, then cd benchly/benchly
+Run on server
+$ cd benchly
+$ poetry install
+$ cd benchly
+$ poetry run python manage.py migrate
+(No migrations to apply)
+$ poetry run python manage.py runserver
+
+
+Add html files: https://www.thecrazyprogrammer.com/2018/11/how-to-add-html-template-in-django.html
+
+On server (do this later):
+Need to bind django to correct IP address
+Maybe a file 
+Might also need to give permission to port 8000
+benchly.settings
+
+On my local machine:
+1) Add code for making figure to home.html as in https://www.codingwithricky.com/2019/08/28/easy-django-plotly/
+2) Add code for making figure to views.py
+3) Add plotly via 
+$ poetry add plotly
+
+
+VS Code is not seeing my dependencies. Tried typing:
+$ poetry shell
+To get the location of my virtual environment, then selected it from vscode by clicking the python version in the lower right and selecting the one from my virtual environment. After that, the django imports were not marked with errors, but my own package imports still were. Tried a few other things before quitting for now. Will try again later. 
+
+Add myself to be a superuser so I can access the admin page
+$ poetry run python manage.py createsuperuser
+Email address: prowe@harbornet.com
+Password: reflectionOfAtree7772115
+
+Some progress made from this:
+https://towardsdatascience.com/django-first-steps-for-the-total-beginners-a-quick-tutorial-5f1e5e7e9a8c
+1) Add the django extensions
+2) $ poetry run python manage.py runscript load_inputs
+3)$ poetry run python manage.py runscript load_outputs
+4) Make changes to html file to print out inputs and outputs
+
+Create the database as in https://towardsdatascience.com/use-python-scripts-to-insert-csv-data-into-django-databases-72eee7c6a433:
+1) Edit the models.py file to create a class for each database
+2) Apply the migrations files to create the tables in the database
+$ poetry run python manage.py makemigrations
+3) It prints out to the screen:
+Migrations for 'my_app':
+  my_app/migrations/0001_initial.py
+    - Create model Inputs
+    - Create model Outputs
+4) Migrate
+$ poetry run python manage.py migrate
+5) Check for errors
+$ poetry run python manage.py check
+6) Create the scripts as described in the url above
+7) Run the scripts via:
+$ poetry run python manage.py runscript load_inputs
+
+Set up the server as in https://www.digitalocean.com/community/tutorials/how-to-serve-django-applications-with-uwsgi-and-nginx-on-ubuntu-16-04
+
+1) Add the server address to allowed_hosts in settings.py:
+ALLOWED_HOSTS = ['149.165.172.29']
+2) Since we will be setting up Nginx to serve our site, we need to configure a directory which will hold our site’s static assets. This will allow Nginx to serve these directly, which will have a positive impact on performance. We will tell Django to place these into a directory called static in our project’s base directory. Add this line to the bottom of the file to configure this behavior:
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+
+<form action="{% url 'vote' question.scenario %}" method="post">
+    {% csrf_token %}
+    <fieldset>
+        <legend><h1>Select a scenario</h1></legend>
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+        {% for choice in climateinputs.scenario %}
+            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.year }}">
+            <label for="choice{{ forloop.counter }}">{{ choice.year }}</label><br>
+        {% endfor %}
+    </fieldset>
+    <input type="submit" value="Select">
+</form>
+
+
+
+
+def timeseries(request, scenario):
+    climateinputs = ClimInputs.objects.all()
+    climvars = ['atmos_co2', 'ocean_co2']
+    context = {
+        'climateinputs': climateinputs,
+        'scenario': scenario,
+        'climvars': climvars,
+        'climvar': climvars[0],
+    }
+    return render(request, 'benchly/index.html', context)
+    # question = get_object_or_404(ClimInputs, scenario=scenario)
+    #return render(request, 'benchly/timeseries.html', {'question': question})
+    #return HttpResponseRedirect(reverse('index', args=(scenario,)))
+
+
+def timeseries2(request, scenario, climvar):
+    climateinputs = ClimInputs.objects.all()
+    climvars = ['atmos_co2', 'ocean_co2']
+    context = {
+        'climateinputs': climateinputs,
+        'scenario': scenario,
+        'climvars': climvars,
+        'climvar': climvar,
+    }
+    return render(request, 'benchly/index.html', context)
+
+
+def detail(request, scenario):
+    question = get_object_or_404(ClimInputs, scenario=scenario)
+    return render(request, 'benchly/detail.html', {'question': question})
+
+def results(request, scenario, year):
+    # response = "Scenario %s."
+    # return HttpResponse(response % scenario)
+    question = get_object_or_404(ClimInputs, scenario=scenario)
+    return render(request, 'benchly/results.html', {'question': question,'year':year})
+
+def vote(request, scenario):
+    question = get_object_or_404(ClimInputs, scenario=scenario)
+    try:
+        selected_choice = question.climoutputs_set.get(year=request.POST['choice'])
+    except (KeyError, ClimOutputs.DoesNotExist):
+        # Redisplay the question voting form.
+        return render(request, 'benchly/detail.html', {
+            'question': question,
+            'error_message': "You didn't select a choice.",
+        })
+    else:
+        # selected_choice.year += 1
+        # selected_choice.save()
+        # Always return an HttpResponseRedirect after successfully dealing
+        # with POST data. This prevents data from being posted twice if a
+        # user hits the Back button.
+        # return HttpResponseRedirect(reverse('results', args=(selected_choice.year)))
+        return HttpResponseRedirect(reverse('results', args=(question.scenario,request.POST['choice'])))
+
+
+
+urls.py
+    # timeseries: /benchly/ts/3/
+    path('ts/<int:scenario>/', views.timeseries, name='timeseries'),
+    # timeseries2: /benchly/ts/3/atmos_co2/
+    path('ts/<int:scenario>/<str:climvar>', views.timeseries2, name='timeseries2'),
+
+    # detail: benchly/3/
+    path('<int:scenario>/', views.detail, name='detail'),
+    # results: /benchly/5/results/
+    path('<int:scenario>/<int:year>/results/', views.results, name='results'),
+    # vote: /benchly/5/vote/
+    path('<int:scenario>/vote/', views.vote, name='vote'),
+#    path('<int:timeseries_scenario>/<int:disp_scenario>/', views.vote, name='vote'),
+
+
+
+    <div class="climate_variables">
+      <h3>Climate Variables</h3>
+      {% for name, value in disp_outyear.get_fields %}
+      <button><a href="/benchly/{{ scenario }}/{{climvar}}/{{ disp_scenario }}/{{ year }}">{{climvar}}</a></button>
+      {% endfor %}
+    </div>
+
+
