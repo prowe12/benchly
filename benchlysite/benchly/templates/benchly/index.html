@@ -100,8 +100,8 @@
       <div class="scenario-buttons">
         {% if climateinputs %}
           {% for inp in climateinputs %}
-            <button><a href="/benchly/{{ inp.scenario }}/{{climvar}}/{{ disp_scenario }}/{{ year }}">
-              {{ inp.scenario }}: {{ inp.start_year }},{{ inp.final_emiss }}</a> </button>
+            <a href="/benchly/{{ inp.scenario }}/{{climvar}}/{{ disp_scenario }}/{{ year }}"> <button>
+              {{ inp.scenario }}: {{ inp.start_year }},{{ inp.final_emiss }}</button></a>
           {% endfor %}
         {% else %}
           <p>No scenarios are available.</p>
@@ -113,7 +113,7 @@
       <h3>Climate Variables</h3>
       {% for name, value in disp_outyear.get_fields %}
       {% if name != 'id' and name != 'scenario' and name != 'year' %}
-        <button><a href="/benchly/{{ scenario }}/{{name}}/{{ disp_scenario }}/{{ year }}">{{name}}</a></button>
+        <a href="/benchly/{{ scenario }}/{{name}}/{{ disp_scenario }}/{{ year }}"><button>{{name}}</button></a>
       {% endif %}
       {% endfor %}
     </div>
@@ -141,8 +141,8 @@
     <div class="scenario-buttons">
       {% if climateinputs %}
         {% for inp in climateinputs %}
-          <button><a href="/benchly/{{ scenario }}/{{climvar}}/{{ inp.scenario }}/{{year}}#climvardisplay">
-            {{ inp.scenario }}: {{ inp.start_year }},{{ inp.final_emiss }}</a> </button>
+          <a href="/benchly/{{ scenario }}/{{climvar}}/{{ inp.scenario }}/{{year}}#climvardisplay">
+            <button>{{ inp.scenario }}: {{ inp.start_year }},{{ inp.final_emiss }}</button></a>
         {% endfor %}
       {% else %}
         <p>No scenarios are available.</p>
@@ -153,8 +153,8 @@
   <div climate_variables>
     <h3>Year</h3>
     {% for year in years %}
-        <button><a href="/benchly/{{ scenario }}/{{climvar}}/{{ disp_scenario }}/{{ year }}#climvardisplay">
-           {{year}} </a></button>
+        <a href="/benchly/{{ scenario }}/{{climvar}}/{{ disp_scenario }}/{{ year }}#climvardisplay">
+          <button>{{year}} </button></a>
     {% endfor %}
   </div>
 

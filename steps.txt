@@ -120,6 +120,8 @@ ALLOWED_HOSTS = ['149.165.172.29']
 2) Since we will be setting up Nginx to serve our site, we need to configure a directory which will hold our site’s static assets. This will allow Nginx to serve these directly, which will have a positive impact on performance. We will tell Django to place these into a directory called static in our project’s base directory. Add this line to the bottom of the file to configure this behavior:
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+3) "Collect our site’s static elements and place them within that directory by typing ~/firstsite/manage.py collectstatic". I'm a little confused why they don't have to invoke python here.
+$ poetry run python manage.py collectstatic
 
 
 <form action="{% url 'vote' question.scenario %}" method="post">
