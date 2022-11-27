@@ -93,7 +93,7 @@ def index(request):
     disp_yearaft = (disp_inp.climoutputs_set.get(year=yearaft)).get_fields()
     for i,(name, value) in enumerate(disp_yearbef):
         if name != 'id' and name != 'scenario' and name != 'year':
-            disp_climvars[name] = wtbef * float(value) + wtaft * float(disp_yearaft[i][1])
+            disp_climvars[name] = round(wtbef * float(value) + wtaft * float(disp_yearaft[i][1]),4)
     print('disp_climvars: ', disp_climvars)
 
     context = {
