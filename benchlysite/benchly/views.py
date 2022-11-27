@@ -9,23 +9,32 @@ import numpy as np
 from .models import Display, Timeseries, ClimInputs, ClimOutputs
 
 
-def index(request):
-    # default values to prevent bombing
-    disp_scenario=1
-    year=2050
+def get_climvar_names():
+    climvars = ['atmos_co2', 'ocean_co2']
+    return climvars
 
-    # get scenario from GET params
-    climvar = request.GET.get('climvar', None)
-    if climvar is None:
-        # raise httperror
-        return
+def index(request):
+    # Default values
+    disp_climvars = {}
+
+    # get variables from GET params
+    climvar = request.GET.get('climvar', 'atmos_co2')
+    disp_scenario = request.GET.get('disp_scenario', 1)
+    year = request.GET.get('disp_year', 2050)
+    if year == '':
+        year = 2100
+    else:
+        year = float(year)
     scenarios = [
         i for i in range(1,17) if request.GET.get(f'scenario{i}', None) is not None
     ]
 
+    print(scenarios)
+    print('disp_scenario', disp_scenario)
+
     # query database
     climvarvals = []
-    years=[]
+    years = []
     climateinputs = ClimInputs.objects.all()
     for scenario in scenarios:
         # TODO: make this parallel processed or something
@@ -34,8 +43,8 @@ def index(request):
         climvarvals.append([getattr(x, climvar) for x in coutp])
         years.append([x.year for x in coutp])
 
-    disp_inp = get_object_or_404(ClimInputs, scenario=disp_scenario)
-    disp_outyear = disp_inp.climoutputs_set.get(year=year)
+ 
+  
 
     colors = [
         'red',
@@ -64,6 +73,29 @@ def index(request):
                         'yaxis': {'title': climvar}}},
                 output_type='div', include_plotlyjs=False)
 
+
+    # disp_inp <-- select * from ClimInputs where scenario=disp_scenario
+    disp_inp = get_object_or_404(ClimInputs, scenario=disp_scenario)
+    # disp_outyear = disp_inp.climoutputs_set.get(year=year)
+
+    # select * from disp_inp natural_join climoutputs
+    disp_all = disp_inp.climoutputs_set.all()
+
+    # Get the indices to the year before and after the years of interest
+    iyear = [i for i,disp_year in enumerate(disp_all) if disp_year.year>=int(year)][0]
+
+    # Interpolate everything to the selected year
+    yearbef = disp_all[iyear-1].year
+    yearaft = disp_all[iyear].year
+    wtaft = (year-yearbef)/(yearaft-yearbef)
+    wtbef = (yearaft-year)/(yearaft-yearbef)
+    disp_yearbef = (disp_inp.climoutputs_set.get(year=yearbef)).get_fields()
+    disp_yearaft = (disp_inp.climoutputs_set.get(year=yearaft)).get_fields()
+    for i,(name, value) in enumerate(disp_yearbef):
+        if name != 'id' and name != 'scenario' and name != 'year':
+            disp_climvars[name] = wtbef * float(value) + wtaft * float(disp_yearaft[i][1])
+    print('disp_climvars: ', disp_climvars)
+
     context = {
         'climateinputs': climateinputs,
         'years': years,
@@ -72,7 +104,7 @@ def index(request):
         'disp_scenario': disp_scenario,
         'year': year,
         'plot_div': plot_div,
-        'disp_outyear': disp_outyear,
+        'disp_outyear': disp_climvars,
     }
     return render(request, 'benchly/index.html', context)
 

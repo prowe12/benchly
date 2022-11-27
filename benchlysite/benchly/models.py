@@ -41,6 +41,17 @@ class ClimOutputs(models.Model):
     def get_fields(self):
         return [(field.name, field.value_to_string(self)) for field in ClimOutputs._meta.fields]
 
+    # def get_dict(self):
+    #     result = {}
+    #     for field in ClimOutputs._meta.fields:
+    #         result[field.name] = field.value_to_string(self)
+    #     return result
+
+    # def interpolate_to_year(self, year):
+    #     climdict = self.get_dict()
+    #     return climdict
+
+
     class Meta:
         """
         Make scenario and year the primary key as per

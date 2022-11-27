@@ -269,6 +269,8 @@ urls.py
 window.addEventListener('DOMContentLoaded', registerYearButton);
 </script>
 
+{% if 'disp_scenario' in request.GET and request.GET.disp_scenario == inpd.scenario %}
+
 
 {% include "benchly/display.html" %}
 
