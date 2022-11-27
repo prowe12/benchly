@@ -222,3 +222,54 @@ urls.py
     </div>
 
 
+
+
+<script>
+  /*****************************************************
+      EVENT LISTENERS FOR USER GENERATED EVENTS
+  ******************************************************/
+
+  /** 
+   * On button click, display the form for the selected scenario
+   */
+  function registerYearButton() {
+      let buttons = document.querySelectorAll("#years button");
+      let scenario_sections = document.querySelectorAll("#scenario-buttons-display form");
+
+      // Hide the forms for all years except the year selected
+      const hide_scenario_sections = function()
+      {
+        for(let section of scenario_sections) {
+          section.classList.add("hidden");
+        }
+        for(let button of buttons) {
+          button.classList.remove("selected");
+        }
+      };
+
+      for(let i=0; i < buttons.length; ++i) {
+        let button = buttons[i];
+        button.addEventListener("click", function changeForm(event) {
+          hide_scenario_sections();
+          scenario_sections[i].classList.remove("hidden");
+          button.classList.add("selected");
+      });
+      }
+
+      // TODO: Put JS/template code here to make it highlight the button that was just clicked.
+      buttons[0].click();
+  }
+
+
+
+/*****************************************************
+    EVENTS TRIGGERED WHEN THE DOM IS FINISHED LOADING
+******************************************************/
+//TODO: why are we getting "button is null" for the following?
+window.addEventListener('DOMContentLoaded', registerYearButton);
+</script>
+
+
+{% include "benchly/display.html" %}
+
+$ git commit -am

@@ -1,0 +1,174 @@
+
+
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Benchly</title>
+  <!-- Keep this line in the head-->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+<style>
+  .scenario-buttons button {
+    color: Black;
+    padding: 10px 24px;
+    cursor: pointer;
+    width: 50%;
+    display: block;
+  }
+
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  /* Style the header */
+  .header {
+    background-color: #f1f1f1;
+    padding: 5px 10px;
+    text-align: center;
+  }
+
+  /* Create three equal columns that floats next to each other */
+  .column1 {
+    float: left;
+    width: 20%;
+    padding: 0px 15px;
+    background-color: #f1f1f1;
+  }
+
+  .column2 {
+    float: left;
+    width: 80%;
+    padding: 0px 0px;
+  }
+
+  .climate_variables {
+    background-color: #f1f1f1;
+    padding: 10px 24px;
+    display: block;
+    float: right;
+    width: 80%;
+    padding: 0px 15px 10px;
+  }
+
+  .climate_variables button {
+    padding: 10px 24px;
+    cursor: pointer;
+    margin-left: 1%;
+    margin-right: 1%;
+  }
+  /* Change color on hover */
+  .climate_variables button:hover {
+    background-color: blue;
+    color: white;
+  }
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+  @media screen and (max-width:600px) {
+    .column1 {
+      width: 100%;
+    }
+  }
+
+
+
+  /* styling to hide scenario choice for unselected climate variables in top panel */
+  .hidden {
+    display: none;
+  }
+  
+  .climate_variables button.selected {
+    background-color: darkgreen;
+    color: white;
+  }
+
+
+  </style>
+</head>
+
+
+
+
+
+
+<body>
+
+
+# Display climate variables for a given scenario and year
+<div class="row">
+  <div class="column1">
+    <h3>Climate Scenario</h3>
+    <p>Scenario: starting year, final emission</p>
+
+      <div id="scenario-buttons-display" class="scenario-buttons">
+      {% if climateinputs %}
+        <form action="/benchly/{{name}}" method="GET">
+        {% for inp in climateinputs %}
+          <button>{{ inp.scenario }}: {{ inp.start_year }},{{ inp.final_emiss }}</button>
+        {% endfor %}
+      {% else %}
+        <p>No scenarios are available.</p>
+      {% endif %}
+    </div>
+
+    <div id="scenario-buttons-display" class="scenario-buttons">
+      {% if climateinputs %}
+        <form action="/benchly/{{name}}" method="GET">
+          {% for inp in climateinputs %}
+            <input type="checkbox" id="scenario{{name}}-{{inp.scenario}}" name="scenario{{inp.scenario}}" value="on">
+            <label for="scenario{{name}}-{{inp.scenario}}">Scenario {{inp.scenario}}</label><br>
+          {% endfor %}
+          <input type="submit" value="Submit">
+        </form>
+      {% else %}
+        <p>No scenarios are available.</p>
+      {% endif %}
+    </div>
+
+</div>
+
+  <div id="years" class="climate_variables">
+    <h3>Year</h3>
+    <input type="text" placeholder="Enter Year" id="inputId">
+    <button type="button" onclick="getInputValue();">Submit</button>
+    <script>
+      function getInputValue() {
+        // Selecting the input element and get its value 
+        let inputVal = document.getElementById("inputId").value;
+        // Displaying the value
+        alert(inputVal);
+      }
+    </script>
+
+  </div>
+
+  <div class="column2" id="climvardisplay">
+    <br>
+    {% for name, value in disp_outyear.get_fields %}
+      {% if name != 'id' %}
+        {{ name }}: {{ value }} <br>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+</div>
+
+
+    
+<br> <br> <br> <br> <br>
+</body>
+
+</html>

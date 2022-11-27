@@ -76,12 +76,26 @@
     clear: both;
   }
 
-    /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
-    @media screen and (max-width:600px) {
-      .column1 {
-        width: 100%;
-      }
+  /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+  @media screen and (max-width:600px) {
+    .column1 {
+      width: 100%;
     }
+  }
+
+
+
+  /* styling to hide scenario choice for unselected climate variables in top panel */
+  .hidden {
+    display: none;
+  }
+  
+  .climate_variables button.selected {
+    background-color: darkgreen;
+    color: white;
+  }
+
+
   </style>
 </head>
 
@@ -92,31 +106,56 @@
     <h1>Benchly's Climate Model</h1>
   </div>
 
-  <div class="row">
+  <form action="/benchly/{{name}}" method="GET">
+    <div class="row">
     <div class="column1">
       <h3>Climate Scenario</h3>
       <p>Scenario: starting year, final emission</p>
 
-      <div class="scenario-buttons">
-        {% if climateinputs %}
-          {% for inp in climateinputs %}
-            <a href="/benchly/{{ inp.scenario }}/{{climvar}}/{{ disp_scenario }}/{{ year }}"> <button>
-              {{ inp.scenario }}: {{ inp.start_year }},{{ inp.final_emiss }}</button></a>
-          {% endfor %}
-        {% else %}
-          <p>No scenarios are available.</p>
-        {% endif %}
-      </div>
+      <!--Create a form to choose the desired scenarios for the selected climate variable
+          Loop over climate variables first, then create a form for each that allows the user
+          to select a set of scenarios. id is, e.g. scenarioatmos_co2-3
+          url is, e.g. http://127.0.0.1:8000/benchly/ocean_co2?scenario3=on&scenario4=on
+      -->
+        <div id="scenario-buttons-top" class="scenario-buttons">
+          {% if name != 'id' and name != 'scenario' and name != 'year' %}
+            {% if climateinputs %}
+                {% for inp in climateinputs %}
+                  {% if "scenario1" in request.GET and inp.scenario == 1 %}
+                    <input type="checkbox" id="scenario{{name}}-{{inp.scenario}}" name="scenario{{inp.scenario}}"
+                      value="on" checked>
+                  {% else %}
+                    <input type="checkbox" id="scenario{{name}}-{{inp.scenario}}" name="scenario{{inp.scenario}}" value="on">
+                  {% endif %}
+                  <label for="scenario{{name}}-{{inp.scenario}}">Scenario {{inp.scenario}}</label><br>
+                {% endfor %}
+                <input type="submit" value="Submit">
+            {% else %}
+              <p>No scenarios are available.</p>
+            {% endif %}
+          {% endif %}
+        </div>
     </div>
-    
-    <div class="climate_variables">
+
+
+    <div id="climate-variables-top" class="climate_variables">
       <h3>Climate Variables</h3>
       {% for name, value in disp_outyear.get_fields %}
-      {% if name != 'id' and name != 'scenario' and name != 'year' %}
-        <a href="/benchly/{{ scenario }}/{{name}}/{{ disp_scenario }}/{{ year }}"><button>{{name}}</button></a>
-      {% endif %}
+        {% if name != 'id' and name != 'scenario' and name != 'year' %}
+          <!--The following will give us climvar={{name}}, e.g. climvar="atmos_co2" in GET params-->
+          {% if 'climvar' in request.GET and request.GET.climvar == name %}
+            <input type="radio" id="climvarbutton-{{name}}" name="climvar" value="{{name}}" checked>
+          {% else %}
+            <input type="radio" id="climvarbutton-{{name}}" name="climvar" value="{{name}}">
+          {% endif %}
+
+          <label for="climvarbutton-{{name}}">{{name}}</label>
+          {% endif %}
       {% endfor %}
     </div>
+
+  </form>
+
 
     <div class="column2" id="graph_area">
       <!-- Time series figure -->
@@ -132,43 +171,54 @@
 ================================================================================================================
 
 
-
-<div class="row">
-  <div class="column1">
-    <h3>Climate Scenario</h3>
-    <p>Scenario: starting year, final emission</p>
-
-    <div class="scenario-buttons">
-      {% if climateinputs %}
-        {% for inp in climateinputs %}
-          <a href="/benchly/{{ scenario }}/{{climvar}}/{{ inp.scenario }}/{{year}}#climvardisplay">
-            <button>{{ inp.scenario }}: {{ inp.start_year }},{{ inp.final_emiss }}</button></a>
-        {% endfor %}
-      {% else %}
-        <p>No scenarios are available.</p>
-      {% endif %}
-    </div>
-  </div>
-
-  <div climate_variables>
-    <h3>Year</h3>
-    {% for year in years %}
-        <a href="/benchly/{{ scenario }}/{{climvar}}/{{ disp_scenario }}/{{ year }}#climvardisplay">
-          <button>{{year}} </button></a>
-    {% endfor %}
-  </div>
-
-  <div class="column2" id="climvardisplay">
-    <br>
-    {% for name, value in disp_outyear.get_fields %}
-      {% if name != 'id' %}
-        {{ name }}: {{ value }} <br>
-      {% endif %}
-    {% endfor %}
-  </div>
-
-</div>
-
+<br> <br> <br> <br> <br>
 </body>
 
+{% include "benchly/display.html" %}
 </html>
+
+<script>
+  /*****************************************************
+      EVENT LISTENERS FOR USER GENERATED EVENTS
+  ******************************************************/
+
+  /** 
+   * On button click, display the form for the selected scenario
+   */
+  function registerClimVarButton() {
+      let buttons = document.querySelectorAll("#climate-variables-top button");
+      let scenario_sections = document.querySelectorAll("#scenario-buttons-top form");
+
+      const hide_scenario_sections = function()
+      {
+        for(let section of scenario_sections) {
+          section.classList.add("hidden");
+        }
+        for(let button of buttons) {
+          button.classList.remove("selected");
+        }
+      };
+
+      // Loop over the model output climate variables that can be plotted and add an event listener for each
+      // that removes the form elements for each button and adds it back for the selected button
+      for(let i=0; i < buttons.length; ++i) {
+        let button = buttons[i];
+        button.addEventListener("click", function changeForm(event) {
+          hide_scenario_sections();
+          scenario_sections[i].classList.remove("hidden");
+          button.classList.add("selected");
+      });
+      }
+
+      // TODO: Put JS/template code here to make it highlight the button that was just clicked.
+      // buttons[0].click();
+  }
+
+
+
+/*****************************************************
+    EVENTS TRIGGERED WHEN THE DOM IS FINISHED LOADING
+******************************************************/
+//TODO: why are we getting "button is null" for the following?
+window.addEventListener('DOMContentLoaded', registerClimVarButton);
+</script>
