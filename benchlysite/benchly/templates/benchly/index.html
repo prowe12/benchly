@@ -180,7 +180,7 @@
             {% endif %}
             <label for="disp-scenario{{inpd.scenario}}">Scenario {{inpd.scenario}}</label><br>
           {% endfor %}
-          <input type="submit" value="Submit" formaction="/URL2">
+          <button type="submit" value="Submit" formaction="/benchly/{{name}}#scenario-buttons-display">Submit </button>
         {% else %}
           <p>No scenarios are available.</p>
         {% endif %}
@@ -189,8 +189,12 @@
 
   <div id="years" class="climate_variables">
     <h3>Year</h3>
-    <input type="text" placeholder="Enter Year" id="disp_year" name="disp_year">
-    <input type="submit" value="Submit">
+    {% if 'disp_year' in request.GET and request.GET.disp_year != ''%}
+      <input type="text" placeholder="Enter Year" id="disp_year" name="disp_year" value="{{request.GET.disp_year}}">
+    {% else %}
+      <input type="text" placeholder="Enter Year" id="disp_year" name="disp_year">
+    {% endif %}
+    <button type="submit" value="Submit" formaction="/benchly/{{name}}#scenario-buttons-display">Submit</button>
   </div>
 
   <div class="column2" id="climvardisplay">
