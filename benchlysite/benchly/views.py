@@ -5,6 +5,7 @@ from django.urls import reverse
 from plotly.offline import plot
 from plotly.graph_objs import Scatter
 import numpy as np
+from django.db.models import Min, Max
 
 from .models import Display, Timeseries, ClimInputs, ClimOutputs
 
@@ -75,14 +76,26 @@ def index(request):
             if name != 'id' and name != 'scenario':
                 disp_outyear[name] = ''
     else:
-        year = float(year)
-        disp_outyear['year'] = int(year)
-
-        # SQL: select * from disp_inp natural_join climoutputs
+        # SQL: select [atts of climoutputs] from disp_inp natural_join climoutputs
         disp_all = disp_inp.climoutputs_set.all()
 
+        year = float(year)
+        yearmin = disp_all.all().aggregate(Min('year'))['year__min']
+        yearmax = disp_all.all().aggregate(Max('year'))['year__max']
+        if year < yearmin:
+            year = yearmin
+        elif year > yearmax:
+            year = yearmax
+
+
+
         # Get the indices to the year before and after the years of interest
+        #year = max(year, min(disp_all.get(year)))
+        print(disp_all.filter(year=2100))
+        # Product.objects.all().aggregate(Min('price'))
         iyear = [i for i,disp_year in enumerate(disp_all) if disp_year.year>=int(year)][0]
+        if iyear <= 0:
+            iyear = 1
 
         # Interpolate everything to the selected year
         yearbef = disp_all[iyear-1].year
@@ -92,7 +105,7 @@ def index(request):
         disp_yearbef = (disp_inp.climoutputs_set.get(year=yearbef)).get_fields()
         disp_yearaft = (disp_inp.climoutputs_set.get(year=yearaft)).get_fields()
         for i,(name, value) in enumerate(disp_yearbef):
-            if name != 'id' and name != 'scenario' and name != 'year':
+            if name != 'id' and name != 'scenario':
                 disp_outyear[name] = round(wtbef * float(value) + wtaft * float(disp_yearaft[i][1]),4)
 
     context = {
