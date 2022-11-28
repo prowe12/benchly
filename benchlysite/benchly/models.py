@@ -26,6 +26,8 @@ class ClimInputs(models.Model):
     final_emiss = models.FloatField()
     def __str__(self):
         return str(self.scenario)
+    def get_fields(self):
+        return [(field.name, field.value_to_string(self)) for field in ClimInputs._meta.fields]
 
 class ClimOutputs(models.Model):
     """

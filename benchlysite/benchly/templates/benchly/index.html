@@ -109,13 +109,12 @@
     <div class="row">
       <div class="column1">
         <h3>Climate Scenario</h3>
-        <p>Scenario: starting year, final emission</p>
+        <p>Scenario: start year, final emissions</p>
 
-        <!--Create a form to choose the desired scenarios for the selected climate variable
+        <!--Use the form to choose the desired scenarios for the selected climate variable
             Loop over climate variables first, then create a form for each that allows the user
             to select a set of scenarios. id is, e.g. scenarioatmos_co2-3
-            url is, e.g. http://127.0.0.1:8000/benchly/ocean_co2?scenario3=on&scenario4=on
-        -->
+            url is, e.g. http://127.0.0.1:8000/benchly/ocean_co2?scenario3=on&scenario4=on -->
         <div id="scenario-buttons-top" class="scenario-buttons">
             {% if climateinputs %}
                 {% for inp in climateinputs %}
@@ -125,7 +124,8 @@
                   {% else %}
                     <input type="checkbox" id="scenario{{name}}-{{inp.scenario}}" name="scenario{{inp.scenario}}" value="on">
                   {% endif %}
-                  <label for="scenario{{name}}-{{inp.scenario}}">Scenario {{inp.scenario}}</label><br>
+                  <label for="scenario{{name}}-{{inp.scenario}}">
+                    Scenario {{inp.scenario}}: {{inp.start_year}}, {{inp.final_emiss}}</label><br>
                 {% endfor %}
                 <input type="submit" value="Submit">
             {% else %}
@@ -135,6 +135,8 @@
     </div>
 
 
+    <!--Add the climate variable buttons, where only one can be selected at a time
+        The names are the keys in the dictionary disp_outyear, so use that -->
     <div id="climate-variables-top" class="climate_variables">
       <h3>Climate Variables</h3>
       {% for name in disp_outyear %}
