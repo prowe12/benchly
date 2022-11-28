@@ -1,2 +1,2 @@
 # benchly
-nah
+Display the results of a toy climate model
