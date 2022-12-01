@@ -262,11 +262,11 @@ DROP TABLE benchly_timeseriesVar\
 \pard\pardeftab720\partightenfactor0
 \cf0 \outl0\strokewidth0 DROP TABLE benchly_timeseries\
 DROP TABLE benchly_display\
-2) Manually edit the files in migrations to remove instances of the above.\
-3) Manually edit \cf3 \kerning1\expnd0\expndtw0 \CocoaLigature0 benchly/benchlysite/benchly/\cf0 \expnd0\expndtw0\kerning0
+2) Quit and save modified database\
+3) Remove all the migrations\
+4) Manually edit \cf3 \kerning1\expnd0\expndtw0 \CocoaLigature0 benchly/benchlysite/benchly/\cf0 \expnd0\expndtw0\kerning0
 \CocoaLigature1 admin.py to remove of delete models\
-4) Manually edit models.py to remove instances of delete models\
-5)\
+5) Manually edit models.py to remove instances of delete models\
 $ 
 \f2\fs30 \cf3 \kerning1\expnd0\expndtw0 \CocoaLigature0 poetry run python manage.py makemigrations\
 $ poetry run python manage.py migrate
