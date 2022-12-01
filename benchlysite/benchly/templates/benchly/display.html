@@ -107,7 +107,7 @@
 <body>
 
 
-# Display climate variables for a given scenario and year
+Display climate variables for a given scenario and year
 <div class="row">
   <div class="column1">
     <h3>Climate Scenario</h3>
@@ -126,7 +126,6 @@
 
     <div id="scenario-buttons-display" class="scenario-buttons">
       {% if climateinputs %}
-        <form action="/benchly/{{name}}" method="GET">
           {% for inp in climateinputs %}
             <input type="checkbox" id="scenario{{name}}-{{inp.scenario}}" name="scenario{{inp.scenario}}" value="on">
             <label for="scenario{{name}}-{{inp.scenario}}">Scenario {{inp.scenario}}</label><br>

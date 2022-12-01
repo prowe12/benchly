@@ -14,8 +14,8 @@ def index(request):
     # Values that must be in the database
     defaultyear = 2100
 
-    # get variables from GET params
-    climvar = request.GET.get('climvar', 'atmos_co2')
+    # get variables from GET params (leave this alone Ben)
+    climvar = request.GET.get('climvar', 'atmos_co2') # the second value is the default I think
     disp_scenario = request.GET.get('disp_scenario', 1)
     year = request.GET.get('disp_year', None)
 
@@ -25,6 +25,8 @@ def index(request):
     # query database
     climvarvals = []
     years = []
+
+    # SQL: select * from ClimInputs
     climateinputs = ClimInputs.objects.all()
     for scenario in scenarios:
         # TODO: make this parallel processed or something
