@@ -45,6 +45,17 @@ class ClimOutputs(models.Model):
     # TODO: Ben - add your new fields
     atmos_co2 = models.FloatField()
     ocean_co2 = models.FloatField()
+    ocean_ph = models.FloatField()
+    t_C = models.FloatField()
+    t_F = models.FloatField()
+    t_anomaly = models.FloatField()
+    f_ha = models.FloatField()
+    f_ao = models.FloatField()
+    f_oa = models.FloatField()
+    f_al = models.FloatField()
+    f_la = models.FloatField()
+    tot_ha = models.FloatField()
+
 
 
     def __str__(self):

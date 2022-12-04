@@ -1,5 +1,5 @@
 # scenario id, year to start reducing co2 emissions, final co2 emissions
-1, 2040,   0
-2, 2050, 0
-3, 2040,  5
-4, 2050, 5
+1, 2025,   0
+2, 2025, 10
+3, 2050,  0
+4, 2050, 10
