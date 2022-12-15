@@ -1,0 +1,328 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2639
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fmodern\fcharset0 Courier;\f2\fnil\fcharset0 Menlo-Regular;
+}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;\csgray\c0;}
+\margl1440\margr1440\vieww19400\viewh11040\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 \
+\
+\
+Getting to the server:\
+$ ssh exouser@149.165.172.29\
+$ password: AHEM BE EDGY FEE LAY SAVE LUNG DESK SHOE EAR ROSA\
+IP address: 149.165.172.29\
+\
+Steps done on server:\
+1) install poetry via:\
+$ curl -sSL https://install.python-poetry.org | python3 -\
+2) Did not work. Tried the following:\
+$ sudo apt install python3-poetry\
+3) ModuleNotFoundError: No module named 'cachecontrol'\
+$ python3 -m pip install cachecontrol\
+4) Success!\
+5) Create the repo:\
+$ poetry new benchly\
+6) $ git clone https://github.com/prowe12/benchly.git\
+7) On local computer, $ poetry init\
+8) $ poetry add Django\
+9) $ poetry run django-admin startproject benchly  \
+This creates benchly/benchly within Benchley\
+10) $ cd benchly/benchly/\
+11a) $ poetry run python manage.py makemigrations my_app\
+11b) $ poetry run python manage.py migrate\
+12) $ poetry run python manage.py runserver\
+13) But we forgot to add the app:\
+$ poetry run python manage.py startapp my_app\
+14) Add a view (see tutorial)\
+15) Run the server (first cd to the dir with manage.py!)\
+$ poetry run python manage.py runserver\
+16)  $ Ctrl C  (quit the server)\
+17) $ add/commit/push\
+\
+Back on server, pull, then cd benchly/benchly\
+Run on server\
+$ cd benchly\
+$ poetry install\
+$ cd benchly\
+$ poetry run python manage.py migrate\
+(No migrations to apply)\
+$ poetry run python manage.py runserver\
+\
+\
+Add html files: https://www.thecrazyprogrammer.com/2018/11/how-to-add-html-template-in-django.html\
+\
+On server (do this later):\
+Need to bind django to correct IP address\
+Maybe a file \
+Might also need to give permission to port 8000\
+benchly.settings\
+\
+On my local machine:\
+1) Add code for making figure to home.html as in https://www.codingwithricky.com/2019/08/28/easy-django-plotly/\
+2) Add code for making figure to views.py\
+3) Add plotly via \
+$ poetry add plotly\
+\
+\
+VS Code is not seeing my dependencies. Tried typing:\
+$ poetry shell\
+To get the location of my virtual environment, then selected it from vscode by clicking the python version in the lower right and selecting the one from my virtual environment. After that, the django imports were not marked with errors, but my own package imports still were. Tried a few other things before quitting for now. Will try again later. \
+\
+Add myself to be a superuser so I can access the admin page\
+$ poetry run python manage.py createsuperuser\
+Email address: prowe@harbornet.com\
+Password: reflectionOfAtree7772115\
+\
+Some progress made from this:\
+https://towardsdatascience.com/django-first-steps-for-the-total-beginners-a-quick-tutorial-5f1e5e7e9a8c\
+1) Add the django extensions\
+2) $ poetry run python manage.py runscript load_inputs\
+3)$ poetry run python manage.py runscript load_outputs\
+4) Make changes to html file to print out inputs and outputs\
+\
+Create the database as in https://towardsdatascience.com/use-python-scripts-to-insert-csv-data-into-django-databases-72eee7c6a433:\
+1) Edit the models.py file to create a class for each database\
+2) Apply the migrations files to create the tables in the database\
+$ poetry run python manage.py makemigrations\
+3) It prints out to the screen:\
+Migrations for 'my_app':\
+  my_app/migrations/0001_initial.py\
+    - Create model Inputs\
+    - Create model Outputs\
+4) Migrate\
+$ poetry run python manage.py migrate\
+5) Check for errors\
+$ poetry run python manage.py check\
+6) Create the scripts as described in the url above\
+7) Run the scripts via:\
+$ poetry run python manage.py runscript load_inputs\
+\
+\
+The server is hanging on $ poetry install.  Fixed via:\
+$ poetry config experimental.new-installer false\
+\
+Set up the server as in https://www.digitalocean.com/community/tutorials/how-to-serve-django-applications-with-uwsgi-and-nginx-on-ubuntu-16-04:\
+- Set up Ubuntu 16.04 to support and serve Django applications. \
+-- Configure the uWSGI application container server to interface with our applications\
+-- Set up Nginx to reverse proxy to uWSGI, giving us access to its security and performance features to serve our apps.\
+\
+1) Add the server address to allowed_hosts in settings.py:\
+ALLOWED_HOSTS = ['149.165.172.29']\
+2) Since we will be setting up Nginx to serve our site, we need to configure a directory which will hold our site\'92s static assets. This will allow Nginx to serve these directly, which will have a positive impact on performance. We will tell Django to place these into a directory called static in our project\'92s base directory. Add this line to the bottom of the file to configure this behavior:\
+STATIC_URL = '/static/'\
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')\
+3) "Collect our site\'92s static elements and place them within that directory by typing ~/firstsite/manage.py collectstatic". I'm a little confused why they don't have to invoke python here.\
+$ poetry run python manage.py collectstatic\
+4) Next, we can open a port so that we can access the Django development server. If you followed the initial server setup guide, you should have a UFW firewall enabled. Allow connections to port 8080 by typing:\
+$ sudo ufw allow 8080\
+(This did not work for me, presumably because I don't have a UFW firewall enabled. Maybe something else is needed?)\
+5) Test the project by temporarily starting the development server. Type: ~/firstsite/manage.py runserver 0.0.0.0:8080.  (I will add python again)\
+$ poetry run python manage.py runserver 0.0.0.0:8080\
+(It worked!!!! Our project is online!)\
+\
+Setting up the uWSGI Application Server\
+1a) Install uwsgi.  The instructions say to do a global installation, but I'm going to try installing in the virtual environment instead:\
+$ poetry config experimental.new-installer false\
+$ poetry add uwsgi\
+Did not work.  Got error [org.freedesktop.DBus.Error.TimedOut] ("Failed to activate service 'org.freedesktop.secrets': timed out (service_start_timeout=120000ms)",)\
+2b) Install uwsgi globally, as directed in the tutorial:\
+$ sudo -H pip3 install uwsgi\
+Got: \
+Successfully installed uwsgi-2.0.21\
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv\
+\
+2) Find out where our virtual environment is located:\
+$ poetry env info\
+Got:\
+Virtualenv\
+Python:         3.10.6\
+Implementation: CPython\
+Path:           /home/exouser/.cache/pypoetry/virtualenvs/benchly-28yFNh-E-py3.10\
+Executable:     /home/exouser/.cache/pypoetry/virtualenvs/benchly-28yFNh-E-py3.10/bin/python\
+Valid:          True\
+\
+System\
+Platform:   linux\
+OS:         posix\
+Python:     3.10.6\
+Path:       /usr\
+Executable: /usr/bin/python3.10\
+\
+3) Test the application server. In the following, we are telling uWSGI to use our virtual environment located in our environment directory, to change to our project\'92s directory, and to use the wsgi.py file stored within our inner firstsite directory to serve the file (using the benchlysite.wsgi Python module syntax). For our demonstration, we told it to serve HTTP on port 8080.\
+\
+If you go to server\'92s domain name or IP address in your browser, followed by :8080, you will see your site again (the static elements in the /admin interface, like CSS, won\'92t work yet). Ctrl C when done.\
+\
+$ uwsgi --http :8080 --home /home/exouser/.cache/pypoetry/virtualenvs/benchly-28yFNh-E-py3.10/ --chdir /home/exouser/benchly/benchlysite -w benchlysite.wsgi\
+\
+\
+4) Running uWSGI from the command line is useful for testing, but isn\'92t particularly helpful for an actual deployment. Instead, we will run uWSGI in \'93Emperor mode\'94, which allows a master process to manage separate applications automatically given a set of configuration files.\
+\
+Create a directory that will hold your configuration files. Since this is a global process, we will create a directory called /etc/uwsgi/sites to store our configuration files:\
+\
+$ sudo mkdir -p /etc/uwsgi/sites\
+\
+5) In this directory, we will place our configuration files. We need a configuration file for each of the projects we are serving. The uWSGI process can take configuration files in a variety of formats, but we will use .ini files due to their simplicity.\
+\
+Create a file for your first project and open it in your text editor:\
+\
+$ sudo vi /etc/uwsgi/sites/benchlysite.ini\
+\
+\
+6) Inside, we must begin with the [uwsgi] section header. All of our information will go beneath this header. We are also going to use variables to make our configuration file more reusable. After the header, set a variable called project with the name of your first project. Add a variable called uid which holds your sudo username.\
+\
+We will also add a variable called base with the path to your user\'92s home directory. This will be constructed from the username we set using the %(variable_name) syntax. This will be replaced by the value of the variable when the config is read:\
+\
+[uwsgi]\
+project = benchly/benchlysite\
+uid = excouser\
+base = /home/%(uid)\
+\
+chdir = %(base)/%(project)\
+home = %(base)/.cache/pypoetry/virtualenvs/benchly-28yFNh-E-py3.10\
+module = %(project).wsgi:application\
+\
+master = true\
+processes = 5\
+\
+socket = /run/uwsgi/%(project).sock\
+chown-socket = %(uid):www-data\
+chmod-socket = 660\
+vacuum = true\
+\
+(Too many instructions. Not pasting everything from here on, just what I did.)\
+\
+7) Create a systemd Unit File for uWSGI\
+$ sudo vi /etc/systemd/system/uwsgi.service\
+\
+[Unit]\
+Description=uWSGI Emperor service\
+\
+[Service]\
+ExecStartPre=/bin/bash -c 'mkdir -p /run/uwsgi; chown exouser:www-data /run/uwsgi'\
+ExecStart=/usr/local/bin/uwsgi --emperor /etc/uwsgi/sites\
+Restart=always\
+KillSignal=SIGQUIT\
+Type=notify\
+NotifyAccess=all\
+\
+[Install]\
+WantedBy=multi-user.target\
+\
+8) Install and Configure Nginx as a Reverse Proxy\
+$ sudo apt-get install nginx\
+\
+9) create a server block configuration file:\
+$ sudo vi /etc/nginx/sites-available/benchlysite\
+\
+10) Inside, we can start our server block by indicating the port number and domain name where our first project should be accessible. The server_name block must match one of the server\'92s domain names or its IP address or else the default Nginx page may be used instead. We\'92ll assume that you have a domain name for each:\
+\
+server \{\
+    listen 80;\
+    server_name http://149.165.172.29:8080;\
+\
+    location = /favicon.ico \{ access_log off; log_not_found off; \}\
+    location /static/ \{\
+        root /home/exouser/benchly/benchlysite;\
+    \}\
+\
+    location / \{\
+        include         uwsgi_params;\
+        uwsgi_pass      unix:/run/uwsgi/benchlysite.sock;\
+    \}\
+\}\
+\
+10) Next, link your new configuration file to Nginx\'92s sites-enabled directory to enable it:\
+$ sudo ln -s /etc/nginx/sites-available/benchlysite /etc/nginx/sites-enabled\
+\
+11) Check the configuration syntax by typing:\
+$ sudo nginx -t\
+\
+12) If no syntax errors are detected, you can restart your Nginx service to load the new configuration:\
+$ sudo systemctl restart nginx\
+\
+13) Start the uWSGI server:\
+$ sudo systemctl start uwsgi\
+\
+14) delete the UFW rule to port 8080 and instead allow access to our Nginx server:\
+$ sudo ufw delete allow 8080\
+$ sudo ufw allow 'Nginx Full'\
+\
+15) DID NOT WORK\
+\
+\
+\
+Manually remove relation from database:\
+\pard\pardeftab720\partightenfactor0
+
+\f1\fs26 \cf0 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 1) In DBbowser:\
+DROP TABLE benchly_timeseriesVar\
+\pard\pardeftab720\partightenfactor0
+\cf0 \outl0\strokewidth0 DROP TABLE benchly_timeseries\
+DROP TABLE benchly_display\
+2) Manually edit the files in migrations to remove instances of the above.\
+3) Manually edit \cf3 \kerning1\expnd0\expndtw0 \CocoaLigature0 benchly/benchlysite/benchly/\cf0 \expnd0\expndtw0\kerning0
+\CocoaLigature1 admin.py to remove of delete models\
+4) Manually edit models.py to remove instances of delete models\
+5)\
+$ 
+\f2\fs30 \cf3 \kerning1\expnd0\expndtw0 \CocoaLigature0 poetry run python manage.py makemigrations\
+$ poetry run python manage.py migrate
+\f1\fs26 \cf0 \expnd0\expndtw0\kerning0
+\CocoaLigature1 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \outl0\strokewidth0 \strokec2 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+http://149.165.172.29\
+\
+\
+TODO:\
+- https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/\
+- $ poetry run python manage.py check --deploy\
+WARNINGS:\
+?: (security.W004) You have not set a value for the SECURE_HSTS_SECONDS setting. If your entire site is served only over SSL, you may want to consider setting a value and enabling HTTP Strict Transport Security. Be sure to read the documentation first; enabling HSTS carelessly can cause serious, irreversible problems.\
+?: (security.W008) Your SECURE_SSL_REDIRECT setting is not set to True. Unless your site should be available over both SSL and non-SSL connections, you may want to either set this setting True or configure a load balancer or reverse-proxy server to redirect all connections to HTTPS.\
+?: (security.W009) Your SECRET_KEY has less than 50 characters, less than 5 unique characters, or it's prefixed with 'django-insecure-' indicating that it was generated automatically by Django. Please generate a long and random value, otherwise many of Django's security-critical features will be vulnerable to attack.\
+?: (security.W012) SESSION_COOKIE_SECURE is not set to True. Using a secure-only session cookie makes it more difficult for network traffic sniffers to hijack user sessions.\
+?: (security.W016) You have 'django.middleware.csrf.CsrfViewMiddleware' in your MIDDLEWARE, but you have not set CSRF_COOKIE_SECURE to True. Using a secure-only CSRF cookie makes it more difficult for network traffic sniffers to steal the CSRF token.\
+?: (security.W018) You should not have DEBUG set to True in deployment.\
+\
+\
+\
+Start the server\
+$ uwsgi --http :8080 --home /home/exouser/.cache/pypoetry/virtualenvs/benchly-28yFNh-E-py3.10/ --chdir /home/exouser/benchly/benchlysite -w benchlysite.wsgi\
+\
+Find it online at: http://149.165.172.29:8080/benchly/\
+\
+\
+\
+\
+Notes:\
+\
+Php is a backend. It\'92s a dynamic site generator\
+Run php page.\
+When someone makes a request, it builds an html page on the fly and sends that back\
+The html code would include the javascript and css\
+\
+Flask and Django are static site generator (maybe)\
+If you want to update the site, you run your build code\
+This builds the templates into html/JS/CSS\
+e.g. once per edit\
+\
+Php does the same build process, but does it every time the user requests the page.\
+e.g. once per page request\
+\
+PhP stuff that I am going to have to replicate in Django\
+Create a template file that includes some Html stuff\
+Query the database\
+Fill out the html table from the query results\
+Put it in a new website that the user is redirected to \
+\
+Django/Flask emulate the same thing\
+Likely less efficient\
+\
+Dynamic means html can be different for same url}

@@ -66,64 +66,48 @@ class ClimOutputs(models.Model):
         ]
 
 
-class Display(models.Model):
-    """
-    User inputs that the user can only choose one of
-    The user can only choose one scenario/year
-    """
-    user = models.CharField(primary_key = True, max_length=20)
-    scenario = models.ForeignKey(ClimInputs, db_column='scenario', on_delete=models.CASCADE)
-    year = models.ForeignKey(ClimOutputs, db_column='year', on_delete=models.CASCADE)
-    #year = models.PositiveIntegerField()
-    def __str__(self):
-        return str(self.user)
+# class Display(models.Model):
+#     """
+#     User inputs that the user can only choose one of
+#     The user can only choose one scenario/year
+#     """
+#     user = models.CharField(primary_key = True, max_length=20)
+#     scenario = models.ForeignKey(ClimInputs, db_column='scenario', on_delete=models.CASCADE)
+#     year = models.ForeignKey(ClimOutputs, db_column='year', on_delete=models.CASCADE)
+#     #year = models.PositiveIntegerField()
+#     def __str__(self):
+#         return str(self.user)
 
-class Timeseries(models.Model):
-    """
-    User inputs for displaying a time series of a particular climate variable for a scenario
-    The user can choose multiple scenarios but only one climate variable
-    The scenario can differ from the scenario in Display
-    """
-    user = models.CharField(max_length=20)
-    scenario = models.ForeignKey(ClimInputs, db_column='scenario', on_delete=models.CASCADE)
-    def __str__(self):
-        return str(self.user) + str(self.scenario)
+# class Timeseries(models.Model):
+#     """
+#     User inputs for displaying a time series of a particular climate variable for a scenario
+#     The user can choose multiple scenarios but only one climate variable
+#     The scenario can differ from the scenario in Display
+#     """
+#     user = models.CharField(max_length=20)
+#     scenario = models.ForeignKey(ClimInputs, db_column='scenario', on_delete=models.CASCADE)
+#     def __str__(self):
+#         return str(self.user) + str(self.scenario)
 
-    class Meta:
-        """
-        Make user and scenario the primary key.
-        This allows each user to have multiple scenarios
-        """
-        constraints = [
-            models.UniqueConstraint(
-                fields=['user', 'scenario'], name='unique_migration_host_combination2'
-            )
-        ]
-
-
-
-class TimeseriesVar(models.Model):
-    """ 
-    The climate variable that the user wishes to display a time series for
-    """
-    user = models.CharField(primary_key = True, max_length=20)
-    climvar = models.CharField(max_length=20)
-    def __str__(self):
-        return str(self.user) + str(self.climvar)
-
-
-class TimeseriesVarForm(ModelForm):
-    class Meta:
-            model = TimeseriesVar
-            fields = ['user', 'climvar']
+#     class Meta:
+#         """
+#         Make user and scenario the primary key.
+#         This allows each user to have multiple scenarios
+#         """
+#         constraints = [
+#             models.UniqueConstraint(
+#                 fields=['user', 'scenario'], name='unique_migration_host_combination2'
+#             )
+#         ]
 
 
 
-# class Question(models.Model):
-#     question_text = models.CharField(max_length=200)
-#     pub_date = models.DateTimeField('date published')
+# class TimeseriesVar(models.Model):
+#     """ 
+#     The climate variable that the user wishes to display a time series for
+#     """
+#     user = models.CharField(primary_key = True, max_length=20)
+#     climvar = models.CharField(max_length=20)
+#     def __str__(self):
+#         return str(self.user) + str(self.climvar)
 
-# class Choice(models.Model):
-#     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-#     choice_text = models.CharField(max_length=200)
-#     votes = models.IntegerField(default=0)

@@ -24,4 +24,3 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),
 ]
-    # path('',views.index, name="homepage")

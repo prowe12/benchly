@@ -7,7 +7,7 @@ from plotly.graph_objs import Scatter
 import numpy as np
 from django.db.models import Min, Max
 
-from .models import Display, Timeseries, ClimInputs, ClimOutputs
+from .models import ClimInputs, ClimOutputs
 
 
 def index(request):
