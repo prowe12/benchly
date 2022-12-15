@@ -17,12 +17,11 @@ from django.contrib import admin
 from django.urls import include, path
 
 # imported views
-from my_app import views
+from benchly import views
 
 urlpatterns = [
     path('benchly/', include('benchly.urls')),
     path('admin/', admin.site.urls),
-    # configured the url
-    path('', views.home),
+    path('', views.index),
 ]
     # path('',views.index, name="homepage")
