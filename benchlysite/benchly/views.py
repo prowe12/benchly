@@ -29,13 +29,12 @@ def index(request):
     # SQL: select * from ClimInputs
     climateinputs = ClimInputs.objects.all()
     for scenario in scenarios:
-        # TODO: make this parallel processed or something
-        # SQL: select * from ClimInputs where scenario=scenario
-        cinp = get_object_or_404(ClimInputs, scenario=scenario)
-        coutp = cinp.climoutputs_set.all()
-        climvarvals.append([getattr(x, climvar) for x in coutp])
+        # Django ORM for SQL command: select scenario,year from ClimateOutputs where scenario=scenario
+        coutp = (ClimOutputs.objects.only('scenario', 'year', climvar)).filter(scenario=scenario)
+        # Get x and y values for timeseries plot
         years.append([x.year for x in coutp])
- 
+        climvarvals.append([getattr(x, climvar) for x in coutp])
+
     colors = [
         'red',
         'orange',
