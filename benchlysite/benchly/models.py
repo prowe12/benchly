@@ -17,13 +17,19 @@ from django.db import models
 from django.forms import ModelForm
 import numpy as np
 
+
+# Define the relational schemas
 class ClimInputs(models.Model):
     """
     Inputs to the climate model
     """
+    # TODO: What is the sql equivalent?  For each
     scenario = models.PositiveIntegerField(primary_key = True)
     start_year = models.PositiveIntegerField()
     final_emiss = models.FloatField()
+
+    # Extras that don't exist in database schemas
+    # TODO: We could add functions for the dependent variables
     def __str__(self):
         return str(self.scenario)
     def get_fields(self):
@@ -35,24 +41,18 @@ class ClimOutputs(models.Model):
     """
     scenario = models.ForeignKey(ClimInputs, db_column='scenario', on_delete=models.CASCADE)
     year = models.PositiveIntegerField()
+
+    # TODO: Ben - add your new fields
     atmos_co2 = models.FloatField()
     ocean_co2 = models.FloatField()
+
+
     def __str__(self):
         return str(self.scenario) + ': ' + str(self.year)
 
+    # Extras that don't exist in database schemas
     def get_fields(self):
         return [(field.name, field.value_to_string(self)) for field in ClimOutputs._meta.fields]
-
-    # def get_dict(self):
-    #     result = {}
-    #     for field in ClimOutputs._meta.fields:
-    #         result[field.name] = field.value_to_string(self)
-    #     return result
-
-    # def interpolate_to_year(self, year):
-    #     climdict = self.get_dict()
-    #     return climdict
-
 
     class Meta:
         """

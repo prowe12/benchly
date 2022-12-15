@@ -113,7 +113,14 @@ $ poetry run python manage.py check
 7) Run the scripts via:
 $ poetry run python manage.py runscript load_inputs
 
-Set up the server as in https://www.digitalocean.com/community/tutorials/how-to-serve-django-applications-with-uwsgi-and-nginx-on-ubuntu-16-04
+
+The server is hanging on $ poetry install.  Fixed via:
+$ poetry config experimental.new-installer false
+
+Set up the server as in https://www.digitalocean.com/community/tutorials/how-to-serve-django-applications-with-uwsgi-and-nginx-on-ubuntu-16-04:
+- Set up Ubuntu 16.04 to support and serve Django applications. 
+-- Configure the uWSGI application container server to interface with our applications
+-- Set up Nginx to reverse proxy to uWSGI, giving us access to its security and performance features to serve our apps.
 
 1) Add the server address to allowed_hosts in settings.py:
 ALLOWED_HOSTS = ['149.165.172.29']
@@ -122,156 +129,164 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 3) "Collect our site’s static elements and place them within that directory by typing ~/firstsite/manage.py collectstatic". I'm a little confused why they don't have to invoke python here.
 $ poetry run python manage.py collectstatic
+4) Next, we can open a port so that we can access the Django development server. If you followed the initial server setup guide, you should have a UFW firewall enabled. Allow connections to port 8080 by typing:
+$ sudo ufw allow 8080
+(This did not work for me, presumably because I don't have a UFW firewall enabled. Maybe something else is needed?)
+5) Test the project by temporarily starting the development server. Type: ~/firstsite/manage.py runserver 0.0.0.0:8080.  (I will add python again)
+$ poetry run python manage.py runserver 0.0.0.0:8080
+(It worked!!!! Our project is online!)
+
+Setting up the uWSGI Application Server
+1a) Install uwsgi.  The instructions say to do a global installation, but I'm going to try installing in the virtual environment instead:
+$ poetry config experimental.new-installer false
+$ poetry add uwsgi
+Did not work.  Got error [org.freedesktop.DBus.Error.TimedOut] ("Failed to activate service 'org.freedesktop.secrets': timed out (service_start_timeout=120000ms)",)
+2b) Install uwsgi globally, as directed in the tutorial:
+$ sudo -H pip3 install uwsgi
+Got: 
+Successfully installed uwsgi-2.0.21
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+
+2) Find out where our virtual environment is located:
+$ poetry env info
+Got:
+Virtualenv
+Python:         3.10.6
+Implementation: CPython
+Path:           /home/exouser/.cache/pypoetry/virtualenvs/benchly-28yFNh-E-py3.10
+Executable:     /home/exouser/.cache/pypoetry/virtualenvs/benchly-28yFNh-E-py3.10/bin/python
+Valid:          True
+
+System
+Platform:   linux
+OS:         posix
+Python:     3.10.6
+Path:       /usr
+Executable: /usr/bin/python3.10
+
+3) Test the application server. In the following, we are telling uWSGI to use our virtual environment located in our environment directory, to change to our project’s directory, and to use the wsgi.py file stored within our inner firstsite directory to serve the file (using the benchlysite.wsgi Python module syntax). For our demonstration, we told it to serve HTTP on port 8080.
+
+If you go to server’s domain name or IP address in your browser, followed by :8080, you will see your site again (the static elements in the /admin interface, like CSS, won’t work yet). Ctrl C when done.
+
+$ uwsgi --http :8080 --home /home/exouser/.cache/pypoetry/virtualenvs/benchly-28yFNh-E-py3.10/ --chdir /home/exouser/benchly/benchlysite -w benchlysite.wsgi
 
 
-<form action="{% url 'vote' question.scenario %}" method="post">
-    {% csrf_token %}
-    <fieldset>
-        <legend><h1>Select a scenario</h1></legend>
-        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-        {% for choice in climateinputs.scenario %}
-            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.year }}">
-            <label for="choice{{ forloop.counter }}">{{ choice.year }}</label><br>
-        {% endfor %}
-    </fieldset>
-    <input type="submit" value="Select">
-</form>
+4) Running uWSGI from the command line is useful for testing, but isn’t particularly helpful for an actual deployment. Instead, we will run uWSGI in “Emperor mode”, which allows a master process to manage separate applications automatically given a set of configuration files.
+
+Create a directory that will hold your configuration files. Since this is a global process, we will create a directory called /etc/uwsgi/sites to store our configuration files:
+
+$ sudo mkdir -p /etc/uwsgi/sites
+
+5) In this directory, we will place our configuration files. We need a configuration file for each of the projects we are serving. The uWSGI process can take configuration files in a variety of formats, but we will use .ini files due to their simplicity.
+
+Create a file for your first project and open it in your text editor:
+
+$ sudo vi /etc/uwsgi/sites/benchlysite.ini
 
 
+6) Inside, we must begin with the [uwsgi] section header. All of our information will go beneath this header. We are also going to use variables to make our configuration file more reusable. After the header, set a variable called project with the name of your first project. Add a variable called uid which holds your sudo username.
 
+We will also add a variable called base with the path to your user’s home directory. This will be constructed from the username we set using the %(variable_name) syntax. This will be replaced by the value of the variable when the config is read:
 
-def timeseries(request, scenario):
-    climateinputs = ClimInputs.objects.all()
-    climvars = ['atmos_co2', 'ocean_co2']
-    context = {
-        'climateinputs': climateinputs,
-        'scenario': scenario,
-        'climvars': climvars,
-        'climvar': climvars[0],
+[uwsgi]
+project = benchly/benchlysite
+uid = excouser
+base = /home/%(uid)
+
+chdir = %(base)/%(project)
+home = %(base)/.cache/pypoetry/virtualenvs/benchly-28yFNh-E-py3.10
+module = %(project).wsgi:application
+
+master = true
+processes = 5
+
+socket = /run/uwsgi/%(project).sock
+chown-socket = %(uid):www-data
+chmod-socket = 660
+vacuum = true
+
+(Too many instructions. Not pasting everything from here on, just what I did.)
+
+7) Create a systemd Unit File for uWSGI
+$ sudo vi /etc/systemd/system/uwsgi.service
+
+[Unit]
+Description=uWSGI Emperor service
+
+[Service]
+ExecStartPre=/bin/bash -c 'mkdir -p /run/uwsgi; chown exouser:www-data /run/uwsgi'
+ExecStart=/usr/local/bin/uwsgi --emperor /etc/uwsgi/sites
+Restart=always
+KillSignal=SIGQUIT
+Type=notify
+NotifyAccess=all
+
+[Install]
+WantedBy=multi-user.target
+
+8) Install and Configure Nginx as a Reverse Proxy
+$ sudo apt-get install nginx
+
+9) create a server block configuration file:
+$ sudo vi /etc/nginx/sites-available/benchlysite
+
+10) Inside, we can start our server block by indicating the port number and domain name where our first project should be accessible. The server_name block must match one of the server’s domain names or its IP address or else the default Nginx page may be used instead. We’ll assume that you have a domain name for each:
+
+server {
+    listen 80;
+    server_name http://149.165.172.29:8080;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location /static/ {
+        root /home/exouser/benchly/benchlysite;
     }
-    return render(request, 'benchly/index.html', context)
-    # question = get_object_or_404(ClimInputs, scenario=scenario)
-    #return render(request, 'benchly/timeseries.html', {'question': question})
-    #return HttpResponseRedirect(reverse('index', args=(scenario,)))
 
-
-def timeseries2(request, scenario, climvar):
-    climateinputs = ClimInputs.objects.all()
-    climvars = ['atmos_co2', 'ocean_co2']
-    context = {
-        'climateinputs': climateinputs,
-        'scenario': scenario,
-        'climvars': climvars,
-        'climvar': climvar,
+    location / {
+        include         uwsgi_params;
+        uwsgi_pass      unix:/run/uwsgi/benchlysite.sock;
     }
-    return render(request, 'benchly/index.html', context)
+}
+
+10) Next, link your new configuration file to Nginx’s sites-enabled directory to enable it:
+$ sudo ln -s /etc/nginx/sites-available/benchlysite /etc/nginx/sites-enabled
+
+11) Check the configuration syntax by typing:
+$ sudo nginx -t
+
+12) If no syntax errors are detected, you can restart your Nginx service to load the new configuration:
+$ sudo systemctl restart nginx
+
+13) Start the uWSGI server:
+$ sudo systemctl start uwsgi
+
+14) delete the UFW rule to port 8080 and instead allow access to our Nginx server:
+$ sudo ufw delete allow 8080
+$ sudo ufw allow 'Nginx Full'
+
+15) DID NOT WORK
 
 
-def detail(request, scenario):
-    question = get_object_or_404(ClimInputs, scenario=scenario)
-    return render(request, 'benchly/detail.html', {'question': question})
-
-def results(request, scenario, year):
-    # response = "Scenario %s."
-    # return HttpResponse(response % scenario)
-    question = get_object_or_404(ClimInputs, scenario=scenario)
-    return render(request, 'benchly/results.html', {'question': question,'year':year})
-
-def vote(request, scenario):
-    question = get_object_or_404(ClimInputs, scenario=scenario)
-    try:
-        selected_choice = question.climoutputs_set.get(year=request.POST['choice'])
-    except (KeyError, ClimOutputs.DoesNotExist):
-        # Redisplay the question voting form.
-        return render(request, 'benchly/detail.html', {
-            'question': question,
-            'error_message': "You didn't select a choice.",
-        })
-    else:
-        # selected_choice.year += 1
-        # selected_choice.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
-        # return HttpResponseRedirect(reverse('results', args=(selected_choice.year)))
-        return HttpResponseRedirect(reverse('results', args=(question.scenario,request.POST['choice'])))
+http://149.165.172.29
 
 
-
-urls.py
-    # timeseries: /benchly/ts/3/
-    path('ts/<int:scenario>/', views.timeseries, name='timeseries'),
-    # timeseries2: /benchly/ts/3/atmos_co2/
-    path('ts/<int:scenario>/<str:climvar>', views.timeseries2, name='timeseries2'),
-
-    # detail: benchly/3/
-    path('<int:scenario>/', views.detail, name='detail'),
-    # results: /benchly/5/results/
-    path('<int:scenario>/<int:year>/results/', views.results, name='results'),
-    # vote: /benchly/5/vote/
-    path('<int:scenario>/vote/', views.vote, name='vote'),
-#    path('<int:timeseries_scenario>/<int:disp_scenario>/', views.vote, name='vote'),
+TODO:
+- https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
+- $ poetry run python manage.py check --deploy
+WARNINGS:
+?: (security.W004) You have not set a value for the SECURE_HSTS_SECONDS setting. If your entire site is served only over SSL, you may want to consider setting a value and enabling HTTP Strict Transport Security. Be sure to read the documentation first; enabling HSTS carelessly can cause serious, irreversible problems.
+?: (security.W008) Your SECURE_SSL_REDIRECT setting is not set to True. Unless your site should be available over both SSL and non-SSL connections, you may want to either set this setting True or configure a load balancer or reverse-proxy server to redirect all connections to HTTPS.
+?: (security.W009) Your SECRET_KEY has less than 50 characters, less than 5 unique characters, or it's prefixed with 'django-insecure-' indicating that it was generated automatically by Django. Please generate a long and random value, otherwise many of Django's security-critical features will be vulnerable to attack.
+?: (security.W012) SESSION_COOKIE_SECURE is not set to True. Using a secure-only session cookie makes it more difficult for network traffic sniffers to hijack user sessions.
+?: (security.W016) You have 'django.middleware.csrf.CsrfViewMiddleware' in your MIDDLEWARE, but you have not set CSRF_COOKIE_SECURE to True. Using a secure-only CSRF cookie makes it more difficult for network traffic sniffers to steal the CSRF token.
+?: (security.W018) You should not have DEBUG set to True in deployment.
 
 
 
-    <div class="climate_variables">
-      <h3>Climate Variables</h3>
-      {% for name, value in disp_outyear.get_fields %}
-      <button><a href="/benchly/{{ scenario }}/{{climvar}}/{{ disp_scenario }}/{{ year }}">{{climvar}}</a></button>
-      {% endfor %}
-    </div>
+Start the server
+$ uwsgi --http :8080 --home /home/exouser/.cache/pypoetry/virtualenvs/benchly-28yFNh-E-py3.10/ --chdir /home/exouser/benchly/benchlysite -w benchlysite.wsgi
+
+Find it online at: http://149.165.172.29:8080/benchly/
 
 
-
-
-<script>
-  /*****************************************************
-      EVENT LISTENERS FOR USER GENERATED EVENTS
-  ******************************************************/
-
-  /** 
-   * On button click, display the form for the selected scenario
-   */
-  function registerYearButton() {
-      let buttons = document.querySelectorAll("#years button");
-      let scenario_sections = document.querySelectorAll("#scenario-buttons-display form");
-
-      // Hide the forms for all years except the year selected
-      const hide_scenario_sections = function()
-      {
-        for(let section of scenario_sections) {
-          section.classList.add("hidden");
-        }
-        for(let button of buttons) {
-          button.classList.remove("selected");
-        }
-      };
-
-      for(let i=0; i < buttons.length; ++i) {
-        let button = buttons[i];
-        button.addEventListener("click", function changeForm(event) {
-          hide_scenario_sections();
-          scenario_sections[i].classList.remove("hidden");
-          button.classList.add("selected");
-      });
-      }
-
-      // TODO: Put JS/template code here to make it highlight the button that was just clicked.
-      buttons[0].click();
-  }
-
-
-
-/*****************************************************
-    EVENTS TRIGGERED WHEN THE DOM IS FINISHED LOADING
-******************************************************/
-//TODO: why are we getting "button is null" for the following?
-window.addEventListener('DOMContentLoaded', registerYearButton);
-</script>
-
-{% if 'disp_scenario' in request.GET and request.GET.disp_scenario == inpd.scenario %}
-
-
-{% include "benchly/display.html" %}
-
-$ git commit -am
+Questions for David:
+- 
