@@ -120,34 +120,3 @@ def index(request):
         'disp_outyear': disp_outyear,
     }
     return render(request, 'benchly/index.html', context)
-
-
-# def extra(request, scenario=1):
-#     climateinputs = ClimInputs.objects.all()
-#     climvars = ['atmos_co2', 'ocean_co2']
-#     cinp = get_object_or_404(ClimInputs, scenario=scenario)
-#     coutp = cinp.climoutputs_set.all()
-#     years = [x.year for x in coutp]
-#     climvar = climvars[0]
-#     year = years[0]
-
-#     # An empty plot
-#     plot_div = ''
-
-#     context = {
-#         'climateinputs': climateinputs,
-#         'climvars': climvars,
-#         'years': years,
-#         'scenario': scenario,
-#         'climvar': climvar,
-#         'disp_scenario': scenario,
-#         'year': year,
-#         'plot_div':plot_div,
-#         'disp_outyear': None,
-#     }
-#     # Wordier method:
-#     # template = loader.get_template('benchly/index.html')
-#     # return HttpResponse(template.render(context, request))
-#     # Shortcut method:
-#     return render(request, 'benchly/index.html', context)
-
