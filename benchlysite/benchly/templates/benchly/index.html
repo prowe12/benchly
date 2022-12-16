@@ -82,7 +82,6 @@
     <div class="row">
       <div class="column1">
         <h3>Climate Scenario</h3>
-        <p>Scenario: starting year, final emission</p>
         <div id="scenario-buttons-display" class="scenario-buttons">
           {% if climateinputs %}
           {% for inpd in climateinputs %}
@@ -99,7 +98,7 @@
           <p>No scenarios are available.</p>
           {% endif %}
         </div>
-        <br><br><br><br><br><br><br><br>
+        <br><br><br><br><br><br><br><br><br><br>
 
       </div>
 
@@ -120,12 +119,6 @@
         {{ key }}: {{ value }} <br>
         {% endif %}
         {% endfor %}
-      </div>
-      <div class="column3">
-        <p> column 2</p>
-      </div>
-      <div class="column3">
-        <p> column 3</p>
       </div>
     </div>
 
