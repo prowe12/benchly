@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE HTML>
 <html>
 
@@ -10,8 +11,11 @@
 
   <!-- CSS - move to seperate file -->
 
-  <link rel="stylesheet" type="text/css" href="template.css" />
+
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+
 </head>
+
 
 <!--Template tags-->
 {% load benchly_extras %}
