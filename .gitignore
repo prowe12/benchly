@@ -2,5 +2,5 @@
 **/.DS_Store
 
 # Ignore extra python files
-*.pyc
-__pycache__
+**/*.pyc
+**/__pycache__
