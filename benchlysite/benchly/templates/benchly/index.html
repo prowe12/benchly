@@ -24,28 +24,31 @@
     <div class="row">
       <div class="column1">
         <h3>Climate Scenario</h3>
-        <p>Scenario: start year, final emissions</p>
+        <p>Key: start year, final emissions</p>
 
         <!--Use the form to choose the desired scenarios for the selected climate variable
             Loop over climate variables first, then create a form for each that allows the user
             to select a set of scenarios. id is, e.g. scenarioatmos_co2-3
             url is, e.g. http://127.0.0.1:8000/benchly/ocean_co2?scenario3=on&scenario4=on -->
-        <div id="scenario-buttons-top" class="scenario-buttons">
+        <div id="scenario-buttons-top">
           {% if climateinputs %}
-            {% for inp in climateinputs %}
-              {% if "scenario"|addstr:inp.scenario in request.GET %}
-                <input class="check_box" type="checkbox" id="scenario{{name}}-{{inp.scenario}}" name="scenario{{inp.scenario}}" value="on" checked>
-              {% else %}
-                <input type="checkbox" id="scenario{{name}}-{{inp.scenario}}" name="scenario{{inp.scenario}}" value="on">
-              {% endif %}
-              <label for="scenario{{name}}-{{inp.scenario}}">
-              Scenario {{inp.scenario}}: {{inp.start_year}}, {{inp.final_emiss}}</label><br>
-            {% endfor %}
-            <input type="submit" value="Submit">
+          {% for inp in climateinputs %}
+          {% if "scenario"|addstr:inp.scenario in request.GET %}
+          <input class="scenario-buttons" type="checkbox" id="scenario{{name}}-{{inp.scenario}}"
+            name="scenario{{inp.scenario}}" value="on" checked>
           {% else %}
-            <p>No scenarios are available.</p>
+          <input type="checkbox" id="scenario{{name}}-{{inp.scenario}}" name="scenario{{inp.scenario}}" value="on">
           {% endif %}
-            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+          <label for="scenario{{name}}-{{inp.scenario}}">
+            {{inp.start_year}}, {{inp.final_emiss}}</label><br>
+          {% endfor %}
+
+
+          <input type="submit" value="Submit" class="top_submit_button">
+          {% else %}
+          <p>No scenarios are available.</p>
+          {% endif %}
+          <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
         </div>
       </div>
 
@@ -54,19 +57,19 @@
       <div id="climate-variables-top" class="climate_variables">
         <h3>Climate Variables</h3>
         {% for name in disp_outyear %}
-            {% if name != 'id' and name != 'scenario' and name != 'year' %}
-                <!--The following will give us climvar={{name}}, e.g. climvar="atmos_co2" in GET params-->
-                {% if 'climvar' in request.GET and request.GET.climvar == name %}
-                    <input type="radio" id="climvarbutton-{{name}}" name="climvar" value="{{name}}" checked>
-                {% else %}
-                    <input type="radio" id="climvarbutton-{{name}}" name="climvar" value="{{name}}">
-                {% endif %}
-                <label for="climvarbutton-{{name}}">{{name}}</label>
-            {% endif %}
+        {% if name != 'id' and name != 'scenario' and name != 'year' %}
+        <!--The following will give us climvar={{name}}, e.g. climvar="atmos_co2" in GET params-->
+        {% if 'climvar' in request.GET and request.GET.climvar == name %}
+        <input type="radio" id="climvarbutton-{{name}}" name="climvar" value="{{name}}" checked>
+        {% else %}
+        <input type="radio" id="climvarbutton-{{name}}" name="climvar" value="{{name}}">
+        {% endif %}
+        <label for="climvarbutton-{{name}}">{{name}}</label>
+        {% endif %}
         {% endfor %}
       </div>
 
-      <div class="column2" id="graph_area">
+      <div class="graph_area" id="graph_area">
         <!-- Time series figure -->
         <!-- Django uses double brackets to render Python variables passed by the views to the templates. -->
         {% autoescape off %}
@@ -81,28 +84,31 @@
         <h3>Climate Scenario</h3>
         <p>Scenario: starting year, final emission</p>
         <div id="scenario-buttons-display" class="scenario-buttons">
-            {% if climateinputs %}
-                {% for inpd in climateinputs %}
-                    {% if 'disp_scenario' in request.GET and request.GET.disp_scenario|add:0 == inpd.scenario %}
-                        <input type="radio" id="disp-scenario{{inpd.scenario}}" name="disp_scenario" value="{{inpd.scenario}}" checked>
-                    {% else %}
-                        <input type="radio" id="disp-scenario{{inpd.scenario}}" name="disp_scenario" value="{{inpd.scenario}}">
-                    {% endif %}
-                        <label for="disp-scenario{{inpd.scenario}}">Scenario {{inpd.scenario}}</label><br>
-                {% endfor %}
-                <button type="submit" value="Submit" formaction="/benchly/{{name}}#scenario-buttons-display">Submit </button>
-            {% else %}
-                <p>No scenarios are available.</p>
-            {% endif %}
+          {% if climateinputs %}
+          {% for inpd in climateinputs %}
+          {% if 'disp_scenario' in request.GET and request.GET.disp_scenario|add:0 == inpd.scenario %}
+          <input type="radio" id="disp-scenario{{inpd.scenario}}" name="disp_scenario" value="{{inpd.scenario}}"
+            checked>
+          {% else %}
+          <input type="radio" id="disp-scenario{{inpd.scenario}}" name="disp_scenario" value="{{inpd.scenario}}">
+          {% endif %}
+          <label for="disp-scenario{{inpd.scenario}}">Scenario {{inpd.scenario}}</label><br>
+          {% endfor %}
+          <button type="submit" value="Submit" formaction="/benchly/{{name}}#scenario-buttons-display">Submit </button>
+          {% else %}
+          <p>No scenarios are available.</p>
+          {% endif %}
         </div>
+        <br><br><br><br><br><br><br><br>
+
       </div>
 
       <div id="years" class="climate_variables">
         <h3>Year</h3>
         {% if 'disp_year' in request.GET and request.GET.disp_year != ''%}
-            <input type="text" placeholder="Enter Year" id="disp_year" name="disp_year" value="{{request.GET.disp_year}}">
+        <input type="text" placeholder="Enter Year" id="disp_year" name="disp_year" value="{{request.GET.disp_year}}">
         {% else %}
-            <input type="text" placeholder="Enter Year" id="disp_year" name="disp_year">
+        <input type="text" placeholder="Enter Year" id="disp_year" name="disp_year">
         {% endif %}
         <button type="submit" value="Submit" formaction="/benchly/{{name}}#scenario-buttons-display">Submit</button>
       </div>
@@ -115,7 +121,14 @@
         {% endif %}
         {% endfor %}
       </div>
+      <div class="column3">
+        <p> column 2</p>
+      </div>
+      <div class="column3">
+        <p> column 3</p>
+      </div>
     </div>
+
 
   </form>
 
