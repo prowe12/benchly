@@ -25,7 +25,7 @@
     <div class="row">
       <div class="column1">
         <h3>Climate Scenario</h3>
-        <p>start year, decarb period, final emissions</p>
+        <p>Scenario, start year, decarb period, final emissions</p>
 
         <!--Use the form to choose the desired scenarios for the selected climate variable
             Loop over climate variables first, then create a form for each that allows the user
@@ -41,15 +41,14 @@
           <input type="checkbox" id="scenario{{name}}-{{inp.scenario}}" name="scenario{{inp.scenario}}" value="on">
           {% endif %}
           <label for="scenario{{name}}-{{inp.scenario}}">
-            {{inp.start_year}}, {{inp.decarb_period}}, {{inp.final_emiss}}</label><br>
+            Scenario{{inp.scenario}}: {{inp.start_year}}, {{inp.decarb_period}}, {{inp.final_emiss}}</label><br>
           {% endfor %}
-
 
           <input type="submit" value="Submit" class="top_submit_button">
           {% else %}
             <p>No scenarios are available.</p>
           {% endif %}
-          <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+          <br><br><br><br><br><br><br><br><br><br><br>
         </div>
       </div>
 
@@ -97,9 +96,8 @@
             {% else %}
                 <p>No scenarios are available.</p>
             {% endif %}
-            <br><br><br><br><br><br><br>
+            <br><br>
         </div>
-        <br><br><br><br><br><br><br><br><br><br>
 
       </div>
 
@@ -127,7 +125,7 @@
   </form>
 
   <br> <br> 
-  &nbsp; The Cambio Climate model was made by Professor Steven Neshyba at the University of Puget Sound. 
+  &nbsp; The CAMBIO Climate model was made by Professor Steven Neshyba at the University of Puget Sound. 
   <br><br>
 </body>
 

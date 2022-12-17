@@ -70,33 +70,22 @@ def index(request):
                 output_type='div', include_plotlyjs=False)
 
     # Names for displaying climate variables
-    climvar_names = {'atmos_co2': 'Atmospheric CO2 (GTC)',
+    climvar_names = {
+                     'f_ha': 'CO2 flux from humans (GTC)',
+                     'atmos_co2': 'Atmospheric CO2 (GTC)',
                      'ocean_co2': 'Ocean CO2 (GTC)',
                      'ocean_ph': 'Ocean pH (GTC)',
                      't_C': 'temperature (C)',
                      't_F': 'temperature (F)',
                      't_anomaly': 'temp. anomaly (C)',
-                     'f_ha': 'flux human-atmosphere (GTC)',
-                     'f_ao': 'flux atmosphere-ocean (GTC)',
-                     'f_oa': 'flux ocean-atmosphere (GTC)',
-                     'f_al': 'flux atmosphere-land (GTC)',
-                     'f_la': 'flux land-atmosphere (GTC)',
-                     'tot_ha': 'total CO2 human-atmosphere (GTC)',
+                     'albedo': 'albedo',
+                     'f_oa': 'CO2 flux from ocean (GTC)',
+                     'f_la': 'CO2 flux from land (GTC)',
+                     'tot_ha': 'total CO2 from humans (GTC)',
                     }
-    climvar_names_bot = {'atmos_co2': 'Atmospheric CO2 (GTC)',
-                     'ocean_co2': 'Ocean CO2 (GTC)',
-                     'ocean_ph': 'Ocean pH (GTC)',
-                     't_C': 'temperature (C)',
-                     't_F': 'temperature (F)',
-                     't_anomaly': 'temp. anomaly (C)',
-                     'f_ha': 'flux human-atmosphere (GTC)',
-                     'f_ao': 'flux atmosphere-ocean (GTC)',
-                     'f_oa': 'flux ocean-atmosphere (GTC)',
-                     'f_al': 'flux atmosphere-land (GTC)',
-                     'f_la': 'flux land-atmosphere (GTC)',
-                     'tot_ha': 'total CO2 human-atmosphere (GTC)',
-                     'year': 'year',
-                    }
+
+    climvar_names_bot = dict(climvar_names) # {key:value for key,value in climvar_names}
+    climvar_names_bot['year'] = 'year'
 
     disp_outyear = {}
     # SQL: disp_inp <-- select * from ClimInputs where scenario=disp_scenario
@@ -134,8 +123,6 @@ def index(request):
         # Interpolate everything to the selected year
         yearbef = disp_all[iyear-1].year
         yearaft = disp_all[iyear].year
-        print(yearbef)
-        print(yearaft)
         wtaft = (year-yearbef)/(yearaft-yearbef)
         wtbef = (yearaft-year)/(yearaft-yearbef)
         disp_yearbef = (disp_inp.climoutputs_set.get(year=yearbef)).get_fields()
@@ -146,7 +133,6 @@ def index(request):
                 disp_outyear[name] = res
                 disp_out[climvar_names_bot[name]] = str(res)
 
-    print(climvar_names)
     context = {
         'climateinputs': climateinputs,
         'years': years,
