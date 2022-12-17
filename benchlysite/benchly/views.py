@@ -82,6 +82,19 @@ def index(request):
                      'f_al': 'flux atmosphere-land (GTC)',
                      'f_la': 'flux land-atmosphere (GTC)',
                      'tot_ha': 'total CO2 human-atmosphere (GTC)',
+                    }
+    climvar_names_bot = {'atmos_co2': 'Atmospheric CO2 (GTC)',
+                     'ocean_co2': 'Ocean CO2 (GTC)',
+                     'ocean_ph': 'Ocean pH (GTC)',
+                     't_C': 'temperature (C)',
+                     't_F': 'temperature (F)',
+                     't_anomaly': 'temp. anomaly (C)',
+                     'f_ha': 'flux human-atmosphere (GTC)',
+                     'f_ao': 'flux atmosphere-ocean (GTC)',
+                     'f_oa': 'flux ocean-atmosphere (GTC)',
+                     'f_al': 'flux atmosphere-land (GTC)',
+                     'f_la': 'flux land-atmosphere (GTC)',
+                     'tot_ha': 'total CO2 human-atmosphere (GTC)',
                      'year': 'year',
                     }
 
@@ -99,7 +112,7 @@ def index(request):
         for i,(name, value) in enumerate(disp_yearbef):
             if name != 'id' and name != 'scenario':
                 disp_outyear[name] = ''
-                disp_out[climvar_names[name]] = ''
+                disp_out[climvar_names_bot[name]] = ''
     else:
         # SQL: select [atts of climoutputs] from disp_inp natural_join climoutputs
         disp_all = disp_inp.climoutputs_set.all()
@@ -131,7 +144,7 @@ def index(request):
             if name != 'id' and name != 'scenario':
                 res = round(wtbef * float(value) + wtaft * float(disp_yearaft[i][1]), 2)
                 disp_outyear[name] = res
-                disp_out[climvar_names[name]] = str(res)
+                disp_out[climvar_names_bot[name]] = str(res)
 
     print(climvar_names)
     context = {
