@@ -1,5 +1,12 @@
-# scenario id, year to start reducing co2 emissions, final co2 emissions
-1, 2040,   0
-2, 2050, 0
-3, 2040,  5
-4, 2050, 5
+#scenario id,decarb date,decarb period,decarb to
+1,2030,20,0
+2,2040,20,0
+3,2040,30,0
+4,2040,20,3
+5,2040,30,3
+6,2050,20,3
+7,2050,30,3
+8,2050,30,5
+9,2060,40,5
+10,2060,30,7
+11,2070,40,7

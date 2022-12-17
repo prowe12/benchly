@@ -26,6 +26,7 @@ class ClimInputs(models.Model):
     # TODO: What is the sql equivalent?  For each
     scenario = models.PositiveIntegerField(primary_key = True)
     start_year = models.PositiveIntegerField()
+    decarb_period = models.PositiveIntegerField()
     final_emiss = models.FloatField()
 
     # Extras that don't exist in database schemas
@@ -43,16 +44,15 @@ class ClimOutputs(models.Model):
     year = models.PositiveIntegerField()
 
     # TODO: Ben - add your new fields
+    f_ha = models.FloatField()
     atmos_co2 = models.FloatField()
     ocean_co2 = models.FloatField()
     ocean_ph = models.FloatField()
     t_C = models.FloatField()
     t_F = models.FloatField()
     t_anomaly = models.FloatField()
-    f_ha = models.FloatField()
-    f_ao = models.FloatField()
+    albedo = models.FloatField()
     f_oa = models.FloatField()
-    f_al = models.FloatField()
     f_la = models.FloatField()
     tot_ha = models.FloatField()
 

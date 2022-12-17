@@ -14,5 +14,6 @@ def run():
 
             clim_inputs = ClimInputs(scenario=row[0],
                         start_year=row[1],
-                        final_emiss=row[2])
+                        decarb_period=row[2],
+                        final_emiss=row[3])
             clim_inputs.save()

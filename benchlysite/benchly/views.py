@@ -15,7 +15,7 @@ def index(request):
     defaultyear = 2100
 
     # get variables from GET params (leave this alone Ben)
-    climvar = request.GET.get('climvar', 'atmos_co2') # the second value is the default I think
+    climvar = request.GET.get('climvar', 'f_ha') # the second value is the default I think
     disp_scenario = request.GET.get('disp_scenario', 1)
     year = request.GET.get('disp_year', None)
 

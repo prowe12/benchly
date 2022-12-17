@@ -24,7 +24,7 @@
     <div class="row">
       <div class="column1">
         <h3>Climate Scenario</h3>
-        <p>Key: start year, final emissions</p>
+        <p>start year, decarb period, final emissions</p>
 
         <!--Use the form to choose the desired scenarios for the selected climate variable
             Loop over climate variables first, then create a form for each that allows the user
@@ -40,7 +40,7 @@
           <input type="checkbox" id="scenario{{name}}-{{inp.scenario}}" name="scenario{{inp.scenario}}" value="on">
           {% endif %}
           <label for="scenario{{name}}-{{inp.scenario}}">
-            {{inp.start_year}}, {{inp.final_emiss}}</label><br>
+            {{inp.start_year}}, {{inp.decarb_period}}, {{inp.final_emiss}}</label><br>
           {% endfor %}
 
 
