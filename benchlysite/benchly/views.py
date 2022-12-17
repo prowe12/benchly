@@ -45,6 +45,13 @@ def index(request):
         'magenta',
         'black',
         'gray',
+        'cornflowerblue',
+        'olive',
+        'tomato',
+        'rosybrown',
+        'cadetblue',
+        'orchid',
+        'purple',
     ]
 
     # The plot
@@ -62,6 +69,21 @@ def index(request):
                         'yaxis': {'title': climvar}}},
                 output_type='div', include_plotlyjs=False)
 
+    # Names for displaying climate variables
+    climvar_names = {'atmos_co2': 'Atmospheric CO2 (GTC)',
+                     'ocean_co2': 'Ocean CO2 (GTC)',
+                     'ocean_ph': 'Ocean pH (GTC)',
+                     't_C': 'temperature (C)',
+                     't_F': 'temperature (F)',
+                     't_anomaly': 'temp. anomaly (C)',
+                     'f_ha': 'flux human-atmosphere (GTC)',
+                     'f_ao': 'flux atmosphere-ocean (GTC)',
+                     'f_oa': 'flux ocean-atmosphere (GTC)',
+                     'f_al': 'flux atmosphere-land (GTC)',
+                     'f_la': 'flux land-atmosphere (GTC)',
+                     'tot_ha': 'total CO2 human-atmosphere (GTC)',
+                     'year': 'year',
+                    }
 
     disp_outyear = {}
     # SQL: disp_inp <-- select * from ClimInputs where scenario=disp_scenario
@@ -88,11 +110,7 @@ def index(request):
         elif year > yearmax:
             year = yearmax
 
-
-
         # Get the indices to the year before and after the years of interest
-        #year = max(year, min(disp_all.get(year)))
-        print(disp_all.filter(year=2100))
         # Product.objects.all().aggregate(Min('price'))
         iyear = [i for i,disp_year in enumerate(disp_all) if disp_year.year>=int(year)][0]
         if iyear <= 0:
@@ -105,9 +123,12 @@ def index(request):
         wtbef = (yearaft-year)/(yearaft-yearbef)
         disp_yearbef = (disp_inp.climoutputs_set.get(year=yearbef)).get_fields()
         disp_yearaft = (disp_inp.climoutputs_set.get(year=yearaft)).get_fields()
+        disp_out = {}
         for i,(name, value) in enumerate(disp_yearbef):
             if name != 'id' and name != 'scenario':
-                disp_outyear[name] = round(wtbef * float(value) + wtaft * float(disp_yearaft[i][1]),4)
+                res = round(wtbef * float(value) + wtaft * float(disp_yearaft[i][1]), 2)
+                disp_outyear[name] = res
+                disp_out[climvar_names[name]] = str(res)
 
     context = {
         'climateinputs': climateinputs,
@@ -117,6 +138,7 @@ def index(request):
         'disp_scenario': disp_scenario,
         'year': year,
         'plot_div': plot_div,
-        'disp_outyear': disp_outyear,
+        'climvar_names': climvar_names,
+        'disp_out': disp_out,
     }
     return render(request, 'benchly/index.html', context)

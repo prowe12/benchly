@@ -17,7 +17,7 @@
 
 <body>
   <div class="header">
-    <h1>Benchly's Climate Model</h1>
+    <h1>Cambio Climate Model, by Benchly</h1>
   </div>
 
   <form action="/benchly/{{name}}" method="GET">
@@ -53,19 +53,19 @@
       </div>
 
       <!--Add the climate variable buttons, where only one can be selected at a time
-        The names are the keys in the dictionary disp_outyear, so use that -->
+        The names and labels were packed into the dictionary climvar_names, so use that -->
       <div id="climate-variables-top" class="climate_variables">
         <h3>Climate Variables</h3>
-        {% for name in disp_outyear %}
-        {% if name != 'id' and name != 'scenario' and name != 'year' %}
-        <!--The following will give us climvar={{name}}, e.g. climvar="atmos_co2" in GET params-->
-        {% if 'climvar' in request.GET and request.GET.climvar == name %}
-        <input type="radio" id="climvarbutton-{{name}}" name="climvar" value="{{name}}" checked>
-        {% else %}
-        <input type="radio" id="climvarbutton-{{name}}" name="climvar" value="{{name}}">
-        {% endif %}
-        <label for="climvarbutton-{{name}}">{{name}}</label>
-        {% endif %}
+        {% for name, name_label in climvar_names.items %}
+          {% if name != 'id' and name != 'scenario' and name != 'year' %}
+            <!--The following will give us climvar={{name}}, e.g. climvar="atmos_co2" in GET params-->
+            {% if 'climvar' in request.GET and request.GET.climvar == name %}
+              <input type="radio" id="climvarbutton-{{name}}" name="climvar" value="{{name}}" checked>
+            {% else %}
+              <input type="radio" id="climvarbutton-{{name}}" name="climvar" value="{{name}}">
+            {% endif %}
+            <label for="climvarbutton-{{name}}">{{name_label}}</label>
+          {% endif %}
         {% endfor %}
       </div>
 
@@ -83,20 +83,20 @@
       <div class="column1">
         <h3>Climate Scenario</h3>
         <div id="scenario-buttons-display" class="scenario-buttons">
-          {% if climateinputs %}
-          {% for inpd in climateinputs %}
-          {% if 'disp_scenario' in request.GET and request.GET.disp_scenario|add:0 == inpd.scenario %}
-          <input type="radio" id="disp-scenario{{inpd.scenario}}" name="disp_scenario" value="{{inpd.scenario}}"
-            checked>
-          {% else %}
-          <input type="radio" id="disp-scenario{{inpd.scenario}}" name="disp_scenario" value="{{inpd.scenario}}">
-          {% endif %}
-          <label for="disp-scenario{{inpd.scenario}}">Scenario {{inpd.scenario}}</label><br>
-          {% endfor %}
-          <button type="submit" value="Submit" formaction="/benchly/{{name}}#scenario-buttons-display">Submit </button>
-          {% else %}
-          <p>No scenarios are available.</p>
-          {% endif %}
+            {% if climateinputs %}
+                {% for inpd in climateinputs %}
+                    {% if 'disp_scenario' in request.GET and request.GET.disp_scenario|add:0 == inpd.scenario %}
+                        <input type="radio" id="disp-scenario{{inpd.scenario}}" name="disp_scenario" value="{{inpd.scenario}}" checked>
+                    {% else %}
+                        <input type="radio" id="disp-scenario{{inpd.scenario}}" name="disp_scenario" value="{{inpd.scenario}}">
+                    {% endif %}
+                        <label for="disp-scenario{{inpd.scenario}}">Scenario {{inpd.scenario}}</label><br>
+                {% endfor %}
+                <button type="submit" value="Submit" formaction="/benchly/{{name}}#scenario-buttons-display">Submit </button>
+            {% else %}
+                <p>No scenarios are available.</p>
+            {% endif %}
+            <br><br><br><br><br><br><br>
         </div>
         <br><br><br><br><br><br><br><br><br><br>
 
@@ -114,10 +114,10 @@
 
       <div class="column2" id="climvardisplay">
         <br>
-        {% for key, value in disp_outyear.items %}
-        {% if key != 'id' %}
-        {{ key }}: {{ value }} <br>
-        {% endif %}
+        {% for key, value in disp_out.items %}
+          {% if key != 'id' %}
+            {{ key }}: {{ value }} <br>
+          {% endif %}
         {% endfor %}
       </div>
     </div>
@@ -125,7 +125,9 @@
 
   </form>
 
-  <br> <br> <br> <br> <br>
+  <br> <br> 
+  &nbsp; The Cambio Climate model was made by Professor Steven Neshyba at the University of Puget Sound. 
+  <br><br>
 </body>
 
 </html>
