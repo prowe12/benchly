@@ -75,19 +75,6 @@ body {
 
 }
 
-/* .climate_variables button {
-  padding: 10px 24px;
-  cursor: pointer;
-  margin-left: 1%;
-  margin-right: 1%;
-} */
-
-/* Change color on hover
-.climate_variables button:hover {
-  background-color: blue;
-  color: white;
-} */
-
 /* Clear floats after the columns */
 .row:after {
     content: "";

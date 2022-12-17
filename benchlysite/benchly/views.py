@@ -92,12 +92,14 @@ def index(request):
     # TODO: add elif for when year is in the database, so no need to interpolate
     # disp_outyear = disp_inp.climoutputs_set.get(year=year)
 
+    disp_out = {}
     if year == '' or year is None:
         disp_outyear['year'] = ''
         disp_yearbef = (disp_inp.climoutputs_set.get(year=defaultyear)).get_fields()
         for i,(name, value) in enumerate(disp_yearbef):
             if name != 'id' and name != 'scenario':
                 disp_outyear[name] = ''
+                disp_out[climvar_names[name]] = ''
     else:
         # SQL: select [atts of climoutputs] from disp_inp natural_join climoutputs
         disp_all = disp_inp.climoutputs_set.all()
@@ -119,17 +121,19 @@ def index(request):
         # Interpolate everything to the selected year
         yearbef = disp_all[iyear-1].year
         yearaft = disp_all[iyear].year
+        print(yearbef)
+        print(yearaft)
         wtaft = (year-yearbef)/(yearaft-yearbef)
         wtbef = (yearaft-year)/(yearaft-yearbef)
         disp_yearbef = (disp_inp.climoutputs_set.get(year=yearbef)).get_fields()
         disp_yearaft = (disp_inp.climoutputs_set.get(year=yearaft)).get_fields()
-        disp_out = {}
         for i,(name, value) in enumerate(disp_yearbef):
             if name != 'id' and name != 'scenario':
                 res = round(wtbef * float(value) + wtaft * float(disp_yearaft[i][1]), 2)
                 disp_outyear[name] = res
                 disp_out[climvar_names[name]] = str(res)
 
+    print(climvar_names)
     context = {
         'climateinputs': climateinputs,
         'years': years,
